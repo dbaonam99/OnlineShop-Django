@@ -25,13 +25,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     # permission_classes = [permissions.IsAuthenticated,]
-
-
-# class ProductVoteViewSet(viewsets.ModelViewSet):
-#     queryset = ProductVote.objects.all()
-#     serializer_class = ProductVoteSerializer
-#     permission_classes = [permissions.IsAuthenticated,]
-
+ 
 
 class ProductVoteCreate(generics.ListCreateAPIView):
     queryset = ProductVote.objects.all()

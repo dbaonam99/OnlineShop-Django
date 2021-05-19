@@ -56,10 +56,10 @@ class Migration(migrations.Migration):
             name='ProductVote',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('voter_name', models.CharField(max_length=256)),
+                ('name', models.CharField(max_length=256)),
                 ('created', models.DateTimeField(auto_now_add=True)),
-                ('voter_text', models.TextField()),
-                ('voter_star', models.CharField(choices=[('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5')], max_length=5)),
+                ('comment', models.TextField()),
+                ('star', models.FloatField()),
                 ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='product_votes', to='products.Product')),
             ],
         ),

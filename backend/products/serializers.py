@@ -22,11 +22,15 @@ class ProductSerializer(serializers.ModelSerializer):
     votes = serializers.SerializerMethodField(method_name='getVotes')
     photo = serializers.SerializerMethodField(method_name='getPhotos') 
     category_name = serializers.SerializerMethodField(method_name='getCategories')
+    category = serializers.PrimaryKeyRelatedField(
+        many=False,
+        queryset=Category.objects.all()
+    )
     class Meta:
         model = Product
         fields = (
-            'id', 'name', 'category_name', 'photo', 'slug', 'description',
-            'price', 'sale', 'final_price','sex', 'available', 'size_names', 'votes',
+            'id', 'name', 'category', 'category_name', 'photo', 'slug', 'description',
+            'price', 'sale', 'final_price','sex', 'available', 'size', 'size_names', 'votes', 'created'
         )
         read_only_fields = ('id', 'created', 'updated', 'photo',)
 

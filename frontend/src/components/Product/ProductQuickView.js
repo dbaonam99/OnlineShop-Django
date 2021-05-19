@@ -46,11 +46,13 @@ function ProductQuickView(props) {
     const { addToCart } = useContext(CartContext)
 
     const cartClick = () => {
-        addToCart(props.product, countCart)
-        setToast(true)
-        setTimeout(() => {
-            setToast(false)
-        }, 2000)
+        console.log('check')
+        console.log(props.product, countCart)
+        // addToCart(props.product, countCart)
+        // setToast(true)
+        // setTimeout(() => {
+        //     setToast(false)
+        // }, 2000)
     }
     const redirect = () => {
         window.scrollTo(0, 0)

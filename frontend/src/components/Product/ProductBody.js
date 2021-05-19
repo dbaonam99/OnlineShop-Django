@@ -130,12 +130,13 @@ export default function ProductBody(props) {
     const { addToCart, addToWishList } = useContext(CartContext)
 
     const cartClick = () => {
-        setLoading(1)
-        setTimeout(() => {
-            setLoading(0)
-            addToCart(product, countCart)
-        }, 500)
-        setCountCart(1)
+        console.log(product, countCart)
+        // setLoading(1)
+        // setTimeout(() => {
+        //     setLoading(0)
+        //     addToCart(product, countCart)
+        // }, 500)
+        // setCountCart(1)
     }
 
     const wishListClick = () => {

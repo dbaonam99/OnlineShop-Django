@@ -51,7 +51,7 @@ export default function ProductReview(props) {
                 ratingAvt: userInfo.userAvt,
             }
             axios.post(
-                `http://127.0.0.1:8000/products/review/${product._id}`,
+                `http://127.0.0.1:8000/api/products/product_vote/${product._id}`,
                 data
             )
             setProductVote((productVote) => [...productVote, data])
@@ -134,7 +134,7 @@ export default function ProductReview(props) {
                                     >
                                         <div className="reviewer">
                                             <img
-                                                src={item.ratingAvt}
+                                                src="https://www.shareicon.net/data/512x512/2017/01/06/868320_people_512x512.png"
                                                 width="100%"
                                                 height="100%"
                                                 alt=""

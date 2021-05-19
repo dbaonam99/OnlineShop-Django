@@ -93,41 +93,57 @@ function Header(props) {
             },
         ]
         setNavBar(navBar)
-        axios.get(`http://127.0.0.1:8000/products`)
-            .then(res => {
+        axios
+            .get(`http://localhost:8000/api/products/?format=json`)
+            .then((res) => {
                 let virtualNavBar = [...navBar]
                 const menProduct = []
                 const womenProduct = []
                 for (let i in res.data) {
-                    if (res.data[i].productSex === "Man") {
+                    if (res.data[i].productSex === 'Man') {
                         menProduct.push(res.data[i].productGroupCate)
                     }
-                    if (res.data[i].productSex === "Woman") {
+                    if (res.data[i].productSex === 'Woman') {
                         womenProduct.push(res.data[i].productGroupCate)
                     }
                 }
-                let groupCateMen = menProduct.filter(function(elem, index, self) {
-                    return index === self.indexOf(elem);
+                let groupCateMen = menProduct.filter(function (
+                    elem,
+                    index,
+                    self
+                ) {
+                    return index === self.indexOf(elem)
                 })
-                let groupCateWomen = womenProduct.filter(function(elem, index, self) {
-                    return index === self.indexOf(elem);
+                let groupCateWomen = womenProduct.filter(function (
+                    elem,
+                    index,
+                    self
+                ) {
+                    return index === self.indexOf(elem)
                 })
                 const menDropdownContent = []
                 for (let i in groupCateMen) {
                     let menData = {}
                     let cateList = []
                     for (let j in res.data) {
-                        if (res.data[j].productGroupCate === groupCateMen[i] && res.data[j].productSex === "Man") {
+                        if (
+                            res.data[j].productGroupCate === groupCateMen[i] &&
+                            res.data[j].productSex === 'Man'
+                        ) {
                             cateList.push(res.data[j].productCate)
                         }
                     }
-                    let cateList2 = cateList.filter(function(elem, index, self) {
-                        return index === self.indexOf(elem);
+                    let cateList2 = cateList.filter(function (
+                        elem,
+                        index,
+                        self
+                    ) {
+                        return index === self.indexOf(elem)
                     })
                     // console.log(cateList)
                     menData = {
                         dropdownTitle: groupCateMen[i],
-                        dropdownList: cateList2
+                        dropdownList: cateList2,
                     }
                     menDropdownContent.push(menData)
                 }
@@ -136,30 +152,37 @@ function Header(props) {
                     let womenData = {}
                     let cateList = []
                     for (let j in res.data) {
-                        if (res.data[j].productGroupCate === groupCateWomen[i] && res.data[j].productSex === "Woman") {
+                        if (
+                            res.data[j].productGroupCate ===
+                                groupCateWomen[i] &&
+                            res.data[j].productSex === 'Woman'
+                        ) {
                             cateList.push(res.data[j].productCate)
                         }
                     }
-                    let cateList2 = cateList.filter(function(elem, index, self) {
-                        return index === self.indexOf(elem);
+                    let cateList2 = cateList.filter(function (
+                        elem,
+                        index,
+                        self
+                    ) {
+                        return index === self.indexOf(elem)
                     })
                     womenData = {
                         dropdownTitle: groupCateWomen[i],
-                        dropdownList: cateList2
+                        dropdownList: cateList2,
                     }
                     womenDropdownContent.push(womenData)
                 }
                 for (let i in virtualNavBar) {
-                    if (virtualNavBar[i].label === "Men") {
+                    if (virtualNavBar[i].label === 'Men') {
                         virtualNavBar[i].dropdownContent = menDropdownContent
                     }
-                    if (virtualNavBar[i].label === "Women") {
+                    if (virtualNavBar[i].label === 'Women') {
                         virtualNavBar[i].dropdownContent = womenDropdownContent
                     }
                 }
                 setNavBar(virtualNavBar)
-            }
-        )
+            })
         if (location === "/news" || location === `/news/category/${props.match.params.cate}` ||
             location === "/collection" || location === `/collection/${path}`) {
             setWhiteText(true);

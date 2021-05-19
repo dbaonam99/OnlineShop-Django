@@ -35,11 +35,11 @@ export default function DashboardBody(props) {
     }
 
     useEffect(() => {
-        // Axios.get(`http://127.0.0.1:8000/products/${props.productId}`)
-        //     .then(res => {
-        //         setProduct(res.data)
-        //     }
-        // )
+        Axios.get(
+            `http://localhost:8000/api/products/${props.productId}?format=json`
+        ).then((res) => {
+            setProduct(res.data)
+        })
         // Axios.get(`http://127.0.0.1:8000/users/list/${props.productId}`)
         //     .then(res => {
         //         setUser(res.data)

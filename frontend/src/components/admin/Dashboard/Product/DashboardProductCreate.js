@@ -17,8 +17,6 @@ export default function DashboardProductCreate(props) {
     const [size, setSize] = useState([])
     const [sex, setSex] = useState('')
     const [file, setFile] = useState([])
-    const [productGroupCate, setProductGroupCate] = useState('')
-    const [productGroupCateList, setProductGroupCateList] = useState([])
 
     const [productImg, setProductImg] = useState([])
 
@@ -27,7 +25,7 @@ export default function DashboardProductCreate(props) {
             if (isCheckedSmall) {
                 setIsCheckedSmall(false)
             } else {
-                setSize((size) => [...size, 'Small'])
+                setSize((size) => [...size, 1])
                 setIsCheckedSmall(true)
             }
         }
@@ -35,7 +33,7 @@ export default function DashboardProductCreate(props) {
             if (isCheckedMedium) {
                 setIsCheckedMedium(false)
             } else {
-                setSize((size) => [...size, 'Medium'])
+                setSize((size) => [...size, 2])
                 setIsCheckedMedium(true)
             }
         }
@@ -43,7 +41,7 @@ export default function DashboardProductCreate(props) {
             if (isCheckedLarge) {
                 setIsCheckedLarge(false)
             } else {
-                setSize((size) => [...size, 'Large'])
+                setSize((size) => [...size, 3])
                 setIsCheckedLarge(true)
             }
         }
@@ -82,7 +80,7 @@ export default function DashboardProductCreate(props) {
                 sale: inputValue.sale,
                 sex: sex,
                 available: true,
-                size: [],
+                size: size,
                 product_votes: [],
             })
             .then((res) => {
@@ -118,23 +116,13 @@ export default function DashboardProductCreate(props) {
                 slug: toSlug(inputValue.cate),
             })
             .then((res) => {
-                console.log(res)
+                setCate((cate) => [...cate, res.data])
+                setCateValue(res.data.id)
+                cateInput.current.value = ''
             })
             .catch((err) => {
                 console.log(err)
             })
-        setCate((cate) => [...cate, { cateName: inputValue.cate }])
-        setCateValue(inputValue.cate)
-        cateInput.current.value = ''
-    }
-
-    const addNewGroupCate = () => {
-        setProductGroupCate(inputValue.groupCate)
-        setProductGroupCateList((productGroupCateList) => [
-            ...productGroupCateList,
-            { productGroupCate: inputValue.groupCate },
-        ])
-        groupCateInput.current.value = ''
     }
 
     const deleteImg = (event) => {
@@ -262,36 +250,6 @@ export default function DashboardProductCreate(props) {
                             />
                         </div>
                     </div>
-                    {/* <div className="create-box-row flex">
-                        <div className="dashboard-left flex">Category group</div>
-                        <div className="dashboard-right flex-center">
-                            <select style={{ width: "350px"}} 
-                                onChange={(event) => {setProductGroupCate(event.target.value)}}
-                                value={productGroupCate}
-                            >
-                                { productGroupCateList.length > 0 &&
-                                    productGroupCateList.map((item, index) => {
-                                        return (
-                                            <option key={index} value={item}>{item.productGroupCate}</option>
-                                        )
-                                    })
-                                }
-                            </select>
-                            <input type="text" name="groupCate" placeholder="New category group?" style={{  margin:'0 10px'}} onChange={handleOnChange} ref={groupCateInput}></input>
-                            <div className="btn" style={{
-                                fontSize: '14px',
-                                fontFamily: 'sans-serif',
-                                fontWeight: '300',
-                                padding: '0 10px',
-                                cursor: 'pointer',
-                                width: '350px',
-                                height: '30px'
-                            }}
-                            onClick={addNewGroupCate}>
-                                Add
-                            </div>
-                        </div>
-                    </div> */}
                     <div className="create-box-row flex">
                         <div className="dashboard-left flex">Category </div>
                         <div className="dashboard-right flex-center">

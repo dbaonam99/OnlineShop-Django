@@ -7,6 +7,7 @@ import axios from 'axios'
 import classNames from 'classnames'
 
 export default function DashboardProductTable(props) {
+    const [isChanged, setIsChanged] = useState(false)
     const [products, setProducts] = useState([])
     // const [searchInput, setSearchInput] = useState("")
     const [constProducts, setConstProducts] = useState([])
@@ -22,7 +23,7 @@ export default function DashboardProductTable(props) {
                 setProducts(res.data)
                 setConstProducts(res.data)
             })
-    }, [props.isChange])
+    }, [isChanged, props.isChange])
 
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 5
@@ -108,15 +109,13 @@ export default function DashboardProductTable(props) {
     }
 
     const deleteOnClick = (event) => {
-        axios.post(
-            `http://127.0.0.1:8000/products/delete/:${event.target.id}`,
-            {
-                productId: event.target.id,
-            }
-        )
+        axios.delete(`http://127.0.0.1:8000/api/products/${event.target.id}/`, {
+            productId: event.target.id,
+        })
+        setIsChanged(!isChanged)
         setProducts(
             products.filter((item) => {
-                return item._id !== event.target.id
+                return item.id !== event.target.id
             })
         )
     }
@@ -124,13 +123,12 @@ export default function DashboardProductTable(props) {
     const searchOnSubmit = (event) => {
         event.preventDefault()
     }
+
     const searchOnChange = (event) => {
         const searchInput = event.target.value
         const search = []
         for (let i in constProducts) {
-            if (
-                constProducts[i].productName.toLowerCase().includes(searchInput)
-            ) {
+            if (constProducts[i].name.toLowerCase().includes(searchInput)) {
                 search.push(constProducts[i])
             }
         }
@@ -142,8 +140,8 @@ export default function DashboardProductTable(props) {
             if (isSortByName) {
                 const sortByName = [...products]
                 sortByName.sort(function (a, b) {
-                    var nameA = a.productName.toLowerCase()
-                    var nameB = b.productName.toLowerCase()
+                    var nameA = a.name.toLowerCase()
+                    var nameB = b.name.toLowerCase()
                     if (nameA === nameB) return 0
                     return nameA > nameB ? 1 : -1
                 })
@@ -152,8 +150,8 @@ export default function DashboardProductTable(props) {
             } else {
                 const sortByName = [...products]
                 sortByName.sort(function (a, b) {
-                    var nameA = a.productName.toLowerCase()
-                    var nameB = b.productName.toLowerCase()
+                    var nameA = a.name.toLowerCase()
+                    var nameB = b.name.toLowerCase()
                     if (nameA === nameB) return 0
                     return nameA < nameB ? 1 : -1
                 })
@@ -165,8 +163,8 @@ export default function DashboardProductTable(props) {
             if (isSortByPrice) {
                 const sortByPrice = [...products]
                 sortByPrice.sort(function (a, b) {
-                    var priceA = a.productPrice
-                    var priceB = b.productPrice
+                    var priceA = a.price
+                    var priceB = b.price
                     if (priceA === priceB) return 0
                     return priceA > priceB ? 1 : -1
                 })
@@ -175,8 +173,8 @@ export default function DashboardProductTable(props) {
             } else {
                 const sortByPrice = [...products]
                 sortByPrice.sort(function (a, b) {
-                    var priceA = a.productPrice
-                    var priceB = b.productPrice
+                    var priceA = a.price
+                    var priceB = b.price
                     if (priceA === priceB) return 0
                     return priceA < priceB ? 1 : -1
                 })
@@ -188,8 +186,8 @@ export default function DashboardProductTable(props) {
             if (isSortBySale) {
                 const sortBySale = [...products]
                 sortBySale.sort(function (a, b) {
-                    var saleA = a.productSale
-                    var saleB = b.productSale
+                    var saleA = a.sale
+                    var saleB = b.sale
                     if (saleA === saleB) return 0
                     return saleA > saleB ? 1 : -1
                 })
@@ -198,8 +196,8 @@ export default function DashboardProductTable(props) {
             } else {
                 const sortBySale = [...products]
                 sortBySale.sort(function (a, b) {
-                    var saleA = a.productSale
-                    var saleB = b.productSale
+                    var saleA = a.sale
+                    var saleB = b.sale
                     if (saleA === saleB) return 0
                     return saleA < saleB ? 1 : -1
                 })
@@ -211,8 +209,8 @@ export default function DashboardProductTable(props) {
             if (isSortBySold) {
                 const sortBySold = [...products]
                 sortBySold.sort(function (a, b) {
-                    var SoldA = a.productSold
-                    var SoldB = b.productSold
+                    var SoldA = a.sold
+                    var SoldB = b.sold
                     if (SoldA === SoldB) return 0
                     return SoldA > SoldB ? 1 : -1
                 })
@@ -221,8 +219,8 @@ export default function DashboardProductTable(props) {
             } else {
                 const sortBySold = [...products]
                 sortBySold.sort(function (a, b) {
-                    var SoldA = a.productSold
-                    var SoldB = b.productSold
+                    var SoldA = a.sold
+                    var SoldB = b.sold
                     if (SoldA === SoldB) return 0
                     return SoldA < SoldB ? 1 : -1
                 })
@@ -281,24 +279,21 @@ export default function DashboardProductTable(props) {
                                 })}
                             </tr>
                             {current.map((item, index) => {
-                                //Counting star vote
-                                // const ratingList = item.productVote.map(
-                                //     (a) => a.ratingStar
-                                // ) // get all rating
+                                // Counting star vote
+                                const ratingList = item.votes.map((a) => a.star) // get all rating
 
-                                // const totalRating = ratingList.reduce(
-                                //     (a, b) => a + b,
-                                //     0
-                                // )
+                                const totalRating = ratingList.reduce(
+                                    (a, b) => a + b,
+                                    0
+                                )
 
-                                // var averageRating = 0
-                                // if (totalRating === 0) {
-                                //     averageRating = 0
-                                // } else {
-                                //     averageRating =
-                                //         totalRating / Number(ratingList.length)
-                                // }
-                                let averageRating = 5
+                                var averageRating = 0
+                                if (totalRating === 0) {
+                                    averageRating = 0
+                                } else {
+                                    averageRating =
+                                        totalRating / Number(ratingList.length)
+                                }
 
                                 return (
                                     <tr key={index}>
@@ -400,7 +395,7 @@ export default function DashboardProductTable(props) {
                                                     onClick={
                                                         props.setOpenEditFunc
                                                     }
-                                                    id={item._id}
+                                                    id={item.id}
                                                 >
                                                     <FontAwesomeIcon
                                                         style={{
@@ -413,7 +408,7 @@ export default function DashboardProductTable(props) {
                                                 <div
                                                     className="action-item flex-center action-red"
                                                     onClick={deleteOnClick}
-                                                    id={item._id}
+                                                    id={item.id}
                                                 >
                                                     <FontAwesomeIcon
                                                         style={{
