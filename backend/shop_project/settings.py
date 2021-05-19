@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'products',
     'orders',
     'locations',
+    'subscribers',
     # External apps
     'rest_framework',
     'corsheaders',
