@@ -1,10 +1,11 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import ProductViewSet, CategoryViewSet, ProductSizeViewSet, ProductVoteCreate, ProductImageViewSet
+from .views import ProductViewSet, CategoryViewSet, ProductSizeViewSet, ProductVoteCreate, ProductImageViewSet, CollectionViewSet
 
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
 router.register(r'products', ProductViewSet)
+router.register(r'collections', CollectionViewSet)
 router.register(r'categories', CategoryViewSet)
 router.register(r'product_size', ProductSizeViewSet)
 router.register(r'product_upload_image', ProductImageViewSet, basename='productimage')

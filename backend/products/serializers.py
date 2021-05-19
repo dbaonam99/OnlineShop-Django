@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Product, Category, ProductSize, ProductVote, ProductImage
+from .models import Product, Category, ProductSize, ProductVote, ProductImage, Collection
 import json
 
 
@@ -82,3 +82,12 @@ class ProductImageSerializer(serializers.ModelSerializer):
         for image in images:
             image = ProductImage.objects.create(image=image, **validated_data)
         return image
+
+
+class CollectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Collection
+        fields = (
+            'id', 'name', 'banner', 'products', 'created'
+        )
+        read_only_fields = ('id', 'created',)

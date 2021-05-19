@@ -58,7 +58,6 @@ class Product(models.Model):
 
 class ProductVote(models.Model): 
     name = models.CharField(max_length=256)
-    created = models.DateTimeField(auto_now_add=True)
     comment = models.TextField() 
     star = models.FloatField()
     created = models.DateTimeField(auto_now_add=True)
@@ -70,3 +69,9 @@ class ProductImage(models.Model):
         Product, related_name="images", on_delete=models.CASCADE
     )
     image = models.ImageField(upload_to='products/%Y/%m/%d', blank=True)
+
+class Collection(models.Model):
+    name = models.CharField(max_length=256)
+    banner = models.CharField(max_length=256)
+    created = models.DateTimeField(auto_now_add=True)
+    products = models.ManyToManyField(Product)

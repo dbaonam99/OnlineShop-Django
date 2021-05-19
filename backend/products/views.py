@@ -5,8 +5,8 @@ from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 
-from .serializers import ProductSerializer, CategorySerializer, ProductSizeSerializer, ProductVoteSerializer, ProductImageSerializer
-from .models import Product, Category, ProductSize, ProductVote, ProductImage
+from .serializers import ProductSerializer, CollectionSerializer, CategorySerializer, ProductSizeSerializer, ProductVoteSerializer, ProductImageSerializer
+from .models import Product, Category, ProductSize, ProductVote, ProductImage, Collection
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -24,6 +24,12 @@ class ProductSizeViewSet(viewsets.ModelViewSet):
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    # permission_classes = [permissions.IsAuthenticated,]
+ 
+
+class CollectionViewSet(viewsets.ModelViewSet):
+    queryset = Collection.objects.all()
+    serializer_class = CollectionSerializer
     # permission_classes = [permissions.IsAuthenticated,]
  
 
