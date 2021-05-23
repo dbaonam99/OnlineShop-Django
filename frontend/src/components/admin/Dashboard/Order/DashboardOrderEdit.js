@@ -109,14 +109,14 @@ export default function DashboardOrderCreate(props) {
         var total = 0
         for (let i in productList) {
             const data = {
-                id: productList[i]._id,
+                id: productList[i].id,
                 amount: productList[i].count,
             }
             total += productList[i].productFinalPrice * productList[i].count
             listOrder.push(data)
         }
         axios
-            .post(`http://127.0.0.1:8000/order/update/${order._id}`, {
+            .post(`http://127.0.0.1:8000/order/update/${order.id}`, {
                 orderName: orderName,
                 orderEmail: orderEmail,
                 orderPhone: orderPhone,
@@ -303,7 +303,7 @@ export default function DashboardOrderCreate(props) {
                                         item = {}
                                     ) => {
                                         for (let cartItem of cartItems) {
-                                            if (cartItem._id === item._id) {
+                                            if (cartItem.id === item.id) {
                                                 return cartItem
                                             }
                                         }
@@ -335,8 +335,8 @@ export default function DashboardOrderCreate(props) {
                                                 i++
                                             ) {
                                                 if (
-                                                    virtualCart[i]._id ===
-                                                    JSON.parse(value)._id
+                                                    virtualCart[i].id ===
+                                                    JSON.parse(value).id
                                                 ) {
                                                     virtualCart[i].count += 1
                                                     break

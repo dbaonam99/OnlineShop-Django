@@ -243,7 +243,7 @@ export default function DashboardProductEdit(props) {
                                                 <div className="create-box-img">
                                                     <img
                                                         key={index}
-                                                        src={`${process.env.REACT_APP_API_KEY}${item}`}
+                                                        src={`${item}`}
                                                         alt=""
                                                     ></img>
                                                     <div className="create-box-img-overlay">

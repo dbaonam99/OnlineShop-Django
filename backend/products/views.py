@@ -5,8 +5,8 @@ from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 
-from .serializers import ProductSerializer, CollectionSerializer, CategorySerializer, ProductSizeSerializer, ProductVoteSerializer, ProductImageSerializer
-from .models import Product, Category, ProductSize, ProductVote, ProductImage, Collection
+from .serializers import ProductSerializer, CollectionSerializer, CategorySerializer, ProductSizeSerializer, ProductVoteSerializer
+from .models import Product, Category, ProductSize, ProductVote, Collection
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -39,8 +39,8 @@ class ProductVoteCreate(generics.ListCreateAPIView):
     # permission_classes = [permissions.IsAuthenticated]
 
 
-class ProductImageViewSet(viewsets.ModelViewSet):
-    queryset = ProductImage.objects.all()
-    serializer_class = ProductImageSerializer
-    parser_classes = (MultiPartParser, FormParser,)
-    # permission_classes = [permissions.IsAuthenticated,]
+# class ProductImageViewSet(viewsets.ModelViewSet):
+#     queryset = ProductImage.objects.all()
+#     serializer_class = ProductImageSerializer
+#     parser_classes = (MultiPartParser, FormParser,)
+#     # permission_classes = [permissions.IsAuthenticated,]

@@ -33,7 +33,7 @@ export default function WishListItem(props) {
                         <div className="cart-item flex" key={index}>
                             <div className="cart-product-img">
                                 <img
-                                    src={`${process.env.REACT_APP_API_KEY}${item.photo[1]}`}
+                                    src={`${item.photo[1]}`}
                                     width="80px"
                                     height="100%"
                                     alt=""

@@ -36,7 +36,7 @@ function CheckoutBody(props) {
     useEffect(() => {
         // if (userInfo) {
         //     setUserAvt(userInfo.userAvt)
-        //     set_Id(userInfo._id)
+        //     set_Id(userInfo.id)
         //     setNameInput(userInfo.userName)
         //     setEmailInput(userInfo.userEmail)
         //     setPhoneInput(userInfo.userPhone)
@@ -70,11 +70,13 @@ function CheckoutBody(props) {
             .get(`http://localhost:8000/api/province/?format=json`)
             .then((res) => {
                 setTinh(res.data)
+                setUserTinh(res.data[0].name)
             })
         axios
             .get(`http://localhost:8000/api/district/?format=json`)
             .then((res) => {
                 setHuyen(res.data)
+                setUserHuyen(res.data[0].name)
             })
         setCartList(JSON.parse(localStorage.getItem('cart')))
     }, [userInfo])
@@ -102,50 +104,49 @@ function CheckoutBody(props) {
         var cartId = []
         for (let i in cartList) {
             cartId.push({
-                id: cartList[i]._id,
-                amount: cartList[i].count,
+                product: cartList[i].id,
+                quantity: cartList[i].count,
             })
         }
 
         const data = {
-            orderName: nameInput,
-            orderAvatar: userAvt,
-            orderEmail: emailInput,
-            orderPhone: phoneInput,
-            orderAddress: addressInput,
-            orderTinh: userTinh,
-            orderHuyen: userHuyen,
-            orderList: cartId,
-            orderTotal: total,
-            orderPaymentMethod: orderPaymentMethod2,
-            orderDate: new Date(),
+            customer_name: nameInput,
+            customer_email: emailInput,
+            customer_phone: phoneInput,
+            customer_province: userTinh,
+            customer_district: userHuyen,
+            customer_address: addressInput,
+            lines: cartId,
+            total_amount: total,
+            payment_method: orderPaymentMethod2,
         }
-
-        if (orderPaymentMethod2 === '') {
-            alert('Fill in all infomation please')
-        } else if (orderPaymentMethod2 === 'zalopay') {
-            if (isPaid === false) {
-                alert('Your payment not yet confirmed!')
-                return
-            } else {
-                axios.post('http://127.0.0.1:8000/order', data)
-                setTimeout(() => {
-                    setConfirm(true)
-                    document.body.style.overflow = 'hidden'
-                    window.scrollTo(0, 0)
-                }, 1000)
-            }
-        } else {
-            axios.post('http://127.0.0.1:8000/order', data)
-            setTimeout(() => {
-                setConfirm(true)
-                document.body.style.overflow = 'hidden'
-                window.scrollTo(0, 0)
-            }, 1000)
-        }
-        setOrderPaymentMethod(orderPaymentMethod2)
-        let addressStr = addressInput + ', ' + userTinh + ', ' + userHuyen
-        setOrderAddressConfirm(addressStr)
+        // if (orderPaymentMethod2 === '') {
+        //     alert('Fill in all infomation please')
+        // } else if (orderPaymentMethod2 === 'zalopay') {
+        //     if (isPaid === false) {
+        //         alert('Your payment not yet confirmed!')
+        //         return
+        //     } else {
+        //         axios.post('http://127.0.0.1:8000/order', data)
+        //         setTimeout(() => {
+        //             setConfirm(true)
+        //             document.body.style.overflow = 'hidden'
+        //             window.scrollTo(0, 0)
+        //         }, 1000)
+        //     }
+        // } else {
+        axios.post('http://localhost:8000/api/orders/', data).then((res) => {
+            console.log(res)
+        })
+        // setTimeout(() => {
+        //     setConfirm(true)
+        //     document.body.style.overflow = 'hidden'
+        //     window.scrollTo(0, 0)
+        // }, 1000)
+        // }
+        // setOrderPaymentMethod(orderPaymentMethod2)
+        // let addressStr = addressInput + ', ' + userTinh + ', ' + userHuyen
+        // setOrderAddressConfirm(addressStr)
     }
 
     return (
@@ -173,7 +174,7 @@ function CheckoutBody(props) {
                                         >
                                             <div style={{ width: '300px' }}>
                                                 <img
-                                                    src={`${process.env.REACT_APP_API_KEY}${item.photo[0]}`}
+                                                    src={`${item.photo[0]}`}
                                                     alt=""
                                                     width="60px"
                                                     height="60px"
@@ -462,7 +463,7 @@ function CheckoutBody(props) {
                                         className="billing-detail-item"
                                     >
                                         <img
-                                            src={`${process.env.REACT_APP_API_KEY}${item.photo[0]}`}
+                                            src={`${item.photo[0]}`}
                                             alt=""
                                             width="60px"
                                             height="60px"

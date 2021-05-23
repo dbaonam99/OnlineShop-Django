@@ -51,7 +51,7 @@ export default function ProductReview(props) {
                 ratingAvt: userInfo.userAvt,
             }
             axios.post(
-                `http://127.0.0.1:8000/api/products/product_vote/${product._id}`,
+                `http://127.0.0.1:8000/api/products/product_vote/${product.id}`,
                 data
             )
             setProductVote((productVote) => [...productVote, data])

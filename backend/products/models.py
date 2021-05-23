@@ -1,6 +1,6 @@
+from django.contrib.auth import get_user_model 
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
-from django.contrib.auth import get_user_model
-
 
 class Category(models.Model):
     name = models.CharField(max_length=200, db_index=True)
@@ -19,7 +19,7 @@ class ProductSize(models.Model):
     name = models.CharField(max_length=256)
 
     def __str__(self):
-        return self.name
+        return self.name 
 
 
 class Product(models.Model):
@@ -40,7 +40,8 @@ class Product(models.Model):
         choices=SEX_CHOICES,
     )
     available = models.BooleanField(default=True)
-    size = models.ManyToManyField(ProductSize, related_name="product_size")
+    size = models.ManyToManyField(ProductSize, related_name="product_size") 
+    photo = ArrayField(models.CharField(max_length=255),default=list)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     final_price = models.IntegerField()
@@ -63,12 +64,6 @@ class ProductVote(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     product = models.ForeignKey(Product, related_name="votes", on_delete=models.CASCADE)
 
-
-class ProductImage(models.Model):
-    product = models.ForeignKey(
-        Product, related_name="images", on_delete=models.CASCADE
-    )
-    image = models.ImageField(upload_to='products/%Y/%m/%d', blank=True)
 
 class Collection(models.Model):
     name = models.CharField(max_length=256)

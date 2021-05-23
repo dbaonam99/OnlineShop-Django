@@ -130,7 +130,7 @@ export default function Search(props) {
                                             cartClick(event)
                                             removeFromWishList(event)
                                         }}
-                                        id={item._id}
+                                        id={item.id}
                                     >
                                         <FontAwesomeIcon
                                             style={{ pointerEvents: 'none' }}

@@ -192,7 +192,7 @@ export default function ProductBody(props) {
                                         }
                                     >
                                         <img
-                                            src={`${process.env.REACT_APP_API_KEY}${item}`}
+                                            src={`${item}`}
                                             onClick={() => {
                                                 setImgIndex(index)
                                             }}
@@ -232,7 +232,7 @@ export default function ProductBody(props) {
                                             transform: `translateX(-${
                                                 width * imgIndex
                                             }px`,
-                                            backgroundImage: `url(${process.env.REACT_APP_API_KEY}${item})`,
+                                            backgroundImage: `url(${item})`,
                                             backgroundPosition: `${zoom}`,
                                         }}
                                     >
@@ -241,7 +241,7 @@ export default function ProductBody(props) {
                                                 id={index}
                                                 className="nodrag"
                                                 style={{ width: `${width}px` }}
-                                                src={`${process.env.REACT_APP_API_KEY}${item}`}
+                                                src={`${item}`}
                                                 alt=""
                                             ></img>
                                         </div>

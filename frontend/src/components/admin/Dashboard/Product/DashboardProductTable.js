@@ -305,7 +305,7 @@ export default function DashboardProductTable(props) {
                                             style={{ display: 'flex' }}
                                         >
                                             <img
-                                                src={`${process.env.REACT_APP_API_KEY}${item.photo[0]}`}
+                                                src={`${item.photo[0]}`}
                                                 width="70px"
                                                 height="80px"
                                                 style={{ padding: '5px 0' }}

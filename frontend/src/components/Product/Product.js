@@ -69,20 +69,14 @@ function Product(props) {
                 <div className="product-img-bg" onClick={redirect}>
                     <img
                         className=""
-                        src={
-                            product.photo &&
-                            `${process.env.REACT_APP_API_KEY}${product.photo[0]}`
-                        }
+                        src={product.photo && `${product.photo[0]}`}
                         alt=""
                     ></img>
                     <img
                         className={
                             hover === false ? 'img-defalt hide' : 'img-defalt'
                         }
-                        src={
-                            product.photo &&
-                            `${process.env.REACT_APP_API_KEY}${product.photo[0]}`
-                        }
+                        src={product.photo && `${product.photo[0]}`}
                         alt=""
                     ></img>
                 </div>

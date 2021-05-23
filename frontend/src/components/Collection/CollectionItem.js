@@ -1,26 +1,36 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { withRouter } from 'react-router-dom'
+import axios from 'axios'
+
 function CollectionItem(props) {
     const [hoverPrice, setHoverPrice] = useState(false)
+    const [product, setProduct] = useState([])
+
+    useEffect(() => {
+        axios
+            .get(
+                `http://localhost:8000/api/products/${props.product}/?format=json`
+            )
+            .then((res) => {
+                setProduct(res.data)
+            })
+    }, [])
 
     const redirect = () => {
         window.scrollTo(0, 0)
-        props.history.push(`/products/${props.product.id}`)
+        props.history.push(`/products/${product.id}`)
     }
 
     return (
         <div className="CollectionItem">
-            <img
-                src={props.product.productImg[0] && props.product.productImg[0]}
-                alt=""
-            ></img>
+            {product.photo && <img src={product.photo[0]} alt=""></img>}
             <div className="collection-overlay-container flex-center">
                 <div className="collectionitem-overlay">
                     <div className="collectionitem-title" onClick={redirect}>
-                        {props.product.productName}
+                        {product.name}
                     </div>
                     <div className="collectionitem-des">
-                        {props.product.productDes}
+                        {product.description}
                     </div>
                     <div
                         className="collectionitem-price"
@@ -31,7 +41,7 @@ function CollectionItem(props) {
                             setHoverPrice(false)
                         }}
                     >
-                        {props.product.productFinalPrice && (
+                        {product.final_price && (
                             <p
                                 className={
                                     hoverPrice
@@ -39,7 +49,7 @@ function CollectionItem(props) {
                                         : 'collectionitem-price-text'
                                 }
                             >
-                                {props.product.productFinalPrice
+                                {product.final_price
                                     .toString()
                                     .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                                 đ

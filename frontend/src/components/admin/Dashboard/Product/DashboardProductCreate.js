@@ -62,51 +62,46 @@ export default function DashboardProductCreate(props) {
             })
     }, [])
 
-    const onSubmit = (event) => {
+    const onSubmit = async (event) => {
         event.preventDefault()
         const config = {
             headers: {
                 'content-type': 'multipart/form-data',
             },
         }
-        axios
-            .post(`http://127.0.0.1:8000/api/products/`, {
-                name: inputValue.name,
-                category: Number(cateValue),
-                images: [],
-                slug: toSlug(inputValue.name),
-                description: inputValue.des,
-                price: inputValue.price,
-                sale: inputValue.sale,
-                sex: sex,
-                available: true,
-                size: size,
-                product_votes: [],
-            })
-            .then((res) => {
-                const formData = new FormData()
-                const imageArr = Array.from(file)
-                imageArr.forEach((image) => {
-                    formData.append('image', image)
+        const imageArr = Array.from(file)
+        const urls = []
+        imageArr.forEach(async (image) => {
+            const formData = new FormData()
+            formData.append('url', image)
+            const res = await axios.post(
+                `http://127.0.0.1:8000/api/images/`,
+                formData,
+                config
+            )
+            urls.push(res.data.url)
+        })
+        setTimeout(() => {
+            console.log(urls)
+            axios
+                .post(`http://127.0.0.1:8000/api/products/`, {
+                    name: inputValue.name,
+                    category: Number(cateValue),
+                    photo: urls,
+                    slug: toSlug(inputValue.name),
+                    description: inputValue.des,
+                    price: inputValue.price,
+                    sale: inputValue.sale,
+                    sex: sex,
+                    available: true,
+                    size: size,
+                    product_votes: [],
                 })
-                formData.append('product', res.data.id)
-                axios
-                    .post(
-                        `http://127.0.0.1:8000/api/product_upload_image/`,
-                        formData,
-                        config
-                    )
-                    .then((res) => {
-                        props.setCloseCreateFunc(false)
-                        props.setToastFunc(true)
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    })
-            })
-            .catch((err) => {
-                console.log(err)
-            })
+                .then((res) => {
+                    props.setCloseCreateFunc(false)
+                    props.setToastFunc(true)
+                })
+        }, 1000)
     }
 
     const addNewCate = async () => {

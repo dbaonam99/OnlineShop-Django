@@ -38,12 +38,12 @@ export default function DashboardMain() {
             .then((res) => {
                 setProducts(res.data)
                 let virtualProducts = [...res.data]
-                virtualProducts.sort((a, b) => b.productSold - a.productSold)
+                virtualProducts.sort((a, b) => b.sold - a.sold)
                 let virtualProducts2 = []
                 for (let i in virtualProducts) {
                     let data = {
                         ...virtualProducts[i],
-                        count: virtualProducts[i].productSold,
+                        count: virtualProducts[i].sold,
                     }
                     virtualProducts2.push(data)
                 }
@@ -244,10 +244,10 @@ export default function DashboardMain() {
     const recentVote = []
     if (products.length > 0) {
         for (let i = 0; i < products.length; i++) {
-            const productVote = products[i].productVote
-            for (let j = 0; j < productVote.length; j++) {
-                const newRatingDate = new Date(productVote[j].ratingDate)
-                productVote[j].productName = products[i].productName
+            const votes = products[i].votes
+            for (let j = 0; j < votes.length; j++) {
+                const newRatingDate = new Date(votes[j].ratingDate)
+                votes[j].productName = products[i].productName
                 if (newRatingDate.getDate() === new Date().getDate()) {
                     let hours = newRatingDate.getHours().toString()
                     let minutes = newRatingDate.getMinutes().toString()
@@ -257,8 +257,8 @@ export default function DashboardMain() {
                     if (minutes < 10) {
                         minutes = '0' + minutes
                     }
-                    productVote[j].ratingHours = hours
-                    productVote[j].ratingMinutes = minutes
+                    votes[j].ratingHours = hours
+                    votes[j].ratingMinutes = minutes
                 } else {
                     let days = newRatingDate.getDate().toString()
                     let months = (newRatingDate.getMonth() + 1).toString()
@@ -268,13 +268,13 @@ export default function DashboardMain() {
                     if (months < 10) {
                         months = '0' + months
                     }
-                    productVote[j].ratingDays = days
-                    productVote[j].ratingMonths = months
-                    productVote[j].ratingYears = newRatingDate
+                    votes[j].ratingDays = days
+                    votes[j].ratingMonths = months
+                    votes[j].ratingYears = newRatingDate
                         .getFullYear()
                         .toString()
                 }
-                recentVote.push(productVote[j])
+                recentVote.push(votes[j])
             }
         }
     }
@@ -296,7 +296,7 @@ export default function DashboardMain() {
             </div>
             <DashboardLocation order={order} />
             <div className="row flex">
-                <DashboardTopFive
+                {/* <DashboardTopFive
                     icon={faUser}
                     title="Top customers by orders"
                     color="lightblue"
@@ -309,8 +309,8 @@ export default function DashboardMain() {
                             title: 'Total orders',
                         },
                     ]}
-                />
-                <DashboardTopFive
+                /> */}
+                {/* <DashboardTopFive
                     icon={faTshirt}
                     title="Top products by selling"
                     color="pink"
@@ -323,7 +323,7 @@ export default function DashboardMain() {
                             title: 'Total sales',
                         },
                     ]}
-                />
+                /> */}
             </div>
             <div className="row flex">
                 <DashboardChartPie email={email} color="pink" />

@@ -41,8 +41,18 @@ function Dashboard(props) {
             name: 'Users',
             icon: faUser,
         },
+        {
+            id: '5',
+            name: 'Collections',
+            icon: faShoppingBag,
+        },
+        {
+            id: '6',
+            name: 'Subscribers',
+            icon: faEnvelope,
+        },
     ]
-    const [tabId, setTabId] = useState('3')
+    const [tabId, setTabId] = useState('5')
     const [openMenu, setOpenMenu] = useState(true)
     const [openMenuMobile, setOpenMenuMobile] = useState(true)
     const [productId, setProductId] = useState('')
