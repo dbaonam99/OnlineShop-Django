@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'locations',
     'subscribers',
     'images',
-    'test',
     # External apps
     'rest_framework',
     'corsheaders',

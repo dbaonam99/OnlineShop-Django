@@ -46,23 +46,29 @@ function Account(props) {
                     setArrErr((arrErr) => [...arrErr, err.response.data])
                 })
         } else {
-            axios
-                .post('http://127.0.0.1:8000/users/', {
-                    userName: user.registerName,
-                    userEmail: user.registerEmail,
-                    userPassword: user.registerPassword,
-                    userRole: 'user',
-                })
-                .then((res) => {
-                    setArrSuccess((arrSuccess) => [...arrSuccess, res.data])
-                    setTimeout(() => {
-                        window.location.reload(false)
-                        document.body.style.overflow = 'unset'
-                    }, 1000)
-                })
-                .catch((err) => {
-                    setArrErr((arrErr) => [...arrErr, err.response.data])
-                })
+            console.log({
+                userName: user.registerName,
+                userEmail: user.registerEmail,
+                userPassword: user.registerPassword,
+                userRole: 'user',
+            })
+            // axios
+            //     .post('http://127.0.0.1:8000/users/', {
+            //         userName: user.registerName,
+            //         userEmail: user.registerEmail,
+            //         userPassword: user.registerPassword,
+            //         userRole: 'user',
+            //     })
+            //     .then((res) => {
+            //         setArrSuccess((arrSuccess) => [...arrSuccess, res.data])
+            //         setTimeout(() => {
+            //             window.location.reload(false)
+            //             document.body.style.overflow = 'unset'
+            //         }, 1000)
+            //     })
+            //     .catch((err) => {
+            //         setArrErr((arrErr) => [...arrErr, err.response.data])
+            //     })
         }
     }
 

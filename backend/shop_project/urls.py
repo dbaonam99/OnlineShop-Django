@@ -14,7 +14,6 @@ urlpatterns = [
     path('api/', include('locations.urls')),
     path('api/', include('subscribers.urls')),
     path('api/', include('images.urls')),
-    path('api/', include('test.urls')),
     path('admin/', admin.site.urls),
     path('api/sign_up/', SignUpView.as_view(), name='sign_up'),
     path('api/log_in/', LogInView.as_view(), name='log_in'),
