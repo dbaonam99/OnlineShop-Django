@@ -73,7 +73,9 @@ export default function DashboardProductEdit(props) {
     useEffect(() => {
         if (product) {
             setProductName(product.name)
-            setProductImg(product.photo.split(','))
+            if (product.photo) {
+                setProductImg(product.photo.split(','))
+            }
             setProductSale(product.sale)
             setProductPrice(product.price)
             setProductDes(product.description)

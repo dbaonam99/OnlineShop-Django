@@ -116,33 +116,22 @@ function CheckoutBody(props) {
             total_amount: total,
             payment_method: orderPaymentMethod2,
         }
-        // if (orderPaymentMethod2 === '') {
-        //     alert('Fill in all infomation please')
-        // } else if (orderPaymentMethod2 === 'zalopay') {
-        //     if (isPaid === false) {
-        //         alert('Your payment not yet confirmed!')
-        //         return
-        //     } else {
-        //         axios.post('http://127.0.0.1:8000/order', data)
-        //         setTimeout(() => {
-        //             setConfirm(true)
-        //             document.body.style.overflow = 'hidden'
-        //             window.scrollTo(0, 0)
-        //         }, 1000)
-        //     }
-        // } else {
-        axios.post('http://localhost:8000/api/orders/', data).then((res) => {
-            console.log(res)
-        })
-        // setTimeout(() => {
-        //     setConfirm(true)
-        //     document.body.style.overflow = 'hidden'
-        //     window.scrollTo(0, 0)
-        // }, 1000)
-        // }
-        // setOrderPaymentMethod(orderPaymentMethod2)
-        // let addressStr = addressInput + ', ' + userTinh + ', ' + userHuyen
-        // setOrderAddressConfirm(addressStr)
+        axios
+            .post('http://localhost:8000/api/orders/', data)
+            .then((res) => {
+                console.log(res)
+            })
+            .then(() => {
+                setTimeout(() => {
+                    setConfirm(true)
+                    document.body.style.overflow = 'hidden'
+                    window.scrollTo(0, 0)
+                }, 1000)
+                setOrderPaymentMethod(orderPaymentMethod2)
+                let addressStr =
+                    addressInput + ', ' + userTinh + ', ' + userHuyen
+                setOrderAddressConfirm(addressStr)
+            })
     }
 
     return (
