@@ -28,28 +28,33 @@ function AccountInfo(props) {
 
     useEffect(() => {
         if (userInfo) {
+            console.log(userInfo)
             setUserName(userInfo.userName)
             setUserEmail(userInfo.userEmail)
             setUserPhone(userInfo.userPhone)
             setUserAvt(userInfo.userAvt)
             setUserAddress(userInfo.userAddress)
             if (userInfo.userTinh !== '') {
-                axios.get(`http://127.0.0.1:8000/vietnam`).then((res) => {
-                    setTinh(res.data[0].tinh)
-                    setHuyen(res.data[0].huyen)
-                    res.data[0].tinh.filter((item) => {
-                        if (userInfo.userTinh === item.name) {
-                            setProvinceId(item.id)
-                        }
-                        return null
+                axios
+                    .get('http://localhost:8000/api/province/?format=json')
+                    .then((res) => {
+                        setTinh(res.data[0].tinh)
+                        setHuyen(res.data[0].huyen)
+                        res.data[0].tinh.filter((item) => {
+                            if (userInfo.userTinh === item.name) {
+                                setProvinceId(item.id)
+                            }
+                            return null
+                        })
                     })
-                })
                 setUserTinh(userInfo.userTinh)
             } else {
-                axios.get(`http://127.0.0.1:8000/vietnam`).then((res) => {
-                    setTinh(res.data[0].tinh)
-                    setHuyen(res.data[0].huyen)
-                })
+                axios
+                    .get('http://localhost:8000/api/province/?format=json')
+                    .then((res) => {
+                        setTinh(res.data[0].tinh)
+                        setHuyen(res.data[0].huyen)
+                    })
             }
             if (userInfo.userHuyen !== '') {
                 setUserHuyen(userInfo.userHuyen)

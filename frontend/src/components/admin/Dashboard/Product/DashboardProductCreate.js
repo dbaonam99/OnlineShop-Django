@@ -82,12 +82,11 @@ export default function DashboardProductCreate(props) {
             urls.push(res.data.url)
         })
         setTimeout(() => {
-            console.log(urls)
             axios
                 .post(`http://127.0.0.1:8000/api/products/`, {
                     name: inputValue.name,
                     category: Number(cateValue),
-                    photo: urls,
+                    photo: urls.join(','),
                     slug: toSlug(inputValue.name),
                     description: inputValue.des,
                     price: inputValue.price,

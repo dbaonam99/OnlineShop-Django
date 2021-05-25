@@ -1,10 +1,9 @@
 from django.contrib.auth import get_user_model
 
-from rest_framework import generics
+from rest_framework import generics, permissions, authentication, viewsets
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .serializers import LogInSerializer, UserSerializer
-
+from .serializers import LogInSerializer, UserSerializer, UserManagerSerializer
 
 class SignUpView(generics.CreateAPIView):
     queryset = get_user_model().objects.all()
@@ -12,3 +11,14 @@ class SignUpView(generics.CreateAPIView):
 
 class LogInView(TokenObtainPairView):
     serializer_class = LogInSerializer
+
+class ManageUserView(generics.RetrieveUpdateAPIView): 
+    serializer_class = UserSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_object(self): 
+        return self.request.user
+
+class UserManagerViewSet(viewsets.ModelViewSet):
+    queryset = get_user_model().objects.all()
+    serializer_class = UserManagerSerializer

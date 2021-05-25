@@ -29,7 +29,6 @@ class ProductSerializer(serializers.ModelSerializer):
             'id', 'name','category', 'category_name', 'photo', 'slug', 'description',
             'price', 'sale', 'final_price','sex', 'available', 'size', 'size_names', 'votes'
         )
-        read_only_fields = ('id', 'created', 'updated',)
 
     def getCategories(self, obj):
         category_name = obj.category.name

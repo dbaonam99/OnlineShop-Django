@@ -23,7 +23,9 @@ function CollectionItem(props) {
 
     return (
         <div className="CollectionItem">
-            {product.photo && <img src={product.photo[0]} alt=""></img>}
+            {product.photo && (
+                <img src={product.photo.split(',')[0]} alt=""></img>
+            )}
             <div className="collection-overlay-container flex-center">
                 <div className="collectionitem-overlay">
                     <div className="collectionitem-title" onClick={redirect}>

@@ -28,12 +28,12 @@ function Shop(props) {
                     const virtualCate = [...res.data]
                     //Get all category
                     const sortedcate = Object.values(
-                        virtualCate.reduce((a, { productCate }) => {
-                            a[productCate] = a[productCate] || {
-                                productCate,
+                        virtualCate.reduce((a, { category_name }) => {
+                            a[category_name] = a[category_name] || {
+                                category_name,
                                 count: 0,
                             }
-                            a[productCate].count++
+                            a[category_name].count++
                             return a
                         }, Object.create(null))
                     )
@@ -64,23 +64,23 @@ function Shop(props) {
                     const virtualCate = []
                     for (let i in res.data) {
                         if (sex === 'woman') {
-                            if (res.data[i].productSex === 'Woman') {
+                            if (res.data[i].sex === 'Woman') {
                                 virtualCate.push(res.data[i])
                             }
                         } else {
-                            if (res.data[i].productSex === 'Man') {
+                            if (res.data[i].sex === 'Man') {
                                 virtualCate.push(res.data[i])
                             }
                         }
                     }
                     //Get all category
                     const sortedcate = Object.values(
-                        virtualCate.reduce((a, { productCate }) => {
-                            a[productCate] = a[productCate] || {
-                                productCate,
+                        virtualCate.reduce((a, { category_name }) => {
+                            a[category_name] = a[category_name] || {
+                                category_name,
                                 count: 0,
                             }
-                            a[productCate].count++
+                            a[category_name].count++
                             return a
                         }, Object.create(null))
                     )
@@ -91,23 +91,23 @@ function Shop(props) {
                     const virtualData = []
                     for (let i in res.data) {
                         if (!cate) {
-                            if (res.data[i].productSex.toLowerCase() === sex) {
+                            if (res.data[i].sex.toLowerCase() === sex) {
                                 virtualData.push(res.data[i])
                             }
                         } else {
                             if (
-                                res.data[i].productSex.toLowerCase() === sex &&
+                                res.data[i].sex.toLowerCase() === sex &&
                                 cate &&
-                                res.data[i].productGroupCate
+                                res.data[i].category_name
                                     .toLowerCase()
                                     .split(' ')
                                     .join('-') === cate
                             ) {
                                 virtualData.push(res.data[i])
                             } else if (
-                                res.data[i].productSex.toLowerCase() === sex &&
+                                res.data[i].sex.toLowerCase() === sex &&
                                 cate &&
-                                res.data[i].productCate
+                                res.data[i].category_name
                                     .toLowerCase()
                                     .split(' ')
                                     .join('-') === cate

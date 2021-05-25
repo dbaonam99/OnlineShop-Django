@@ -47,25 +47,25 @@ export default function ProductBody(props) {
     if (props.product) {
         product = props.product
         slugSex = '/' + toSlug(product.sex === 'Woman' ? 'Women' : 'Men')
-        if (imgIndex >= product.photo.length) {
+        if (imgIndex >= product.photo.split(',').length) {
             //infinity slider loop
             // setProductImgBig(productImgBig.concat(props.productImg))
             setImgIndex(0)
         }
 
         if (window.innerWidth > 900) {
-            if (product.photo.length > 4) {
+            if (product.photo.split(',').length > 4) {
                 if (imgIndex === 1 || imgIndex === 2) {
                     productSmall.current.style.transform = `translateY(0px)`
-                } else if (imgIndex === product.photo.length - 1) {
+                } else if (imgIndex === product.photo.split(',').length - 1) {
                     productSmall.current.style.transform = `translateY(-${
                         (imgIndex - 5) * 110 + 50
                     }px)`
-                } else if (imgIndex === product.photo.length - 2) {
+                } else if (imgIndex === product.photo.split(',').length - 2) {
                     productSmall.current.style.transform = `translateY(-${
                         (imgIndex - 4) * 110 + 50
                     }px)`
-                } else if (imgIndex === product.photo.length - 3) {
+                } else if (imgIndex === product.photo.split(',').length - 3) {
                     productSmall.current.style.transform = `translateY(-${
                         (imgIndex - 3) * 110 + 50
                     }px)`
@@ -80,19 +80,19 @@ export default function ProductBody(props) {
                 }
             }
         } else {
-            if (product.photo.length > 4) {
+            if (product.photo.split(',').length > 4) {
                 console.log(imgIndex)
                 if (imgIndex === 1 || imgIndex === 2) {
                     productSmall.current.style.transform = `translateX(0px)`
-                } else if (imgIndex === product.photo.length - 1) {
+                } else if (imgIndex === product.photo.split(',').length - 1) {
                     productSmall.current.style.transform = `translateX(-${
                         (imgIndex - 5) * 85 + 105
                     }px)`
-                } else if (imgIndex === product.photo.length - 2) {
+                } else if (imgIndex === product.photo.split(',').length - 2) {
                     productSmall.current.style.transform = `translateX(-${
                         (imgIndex - 4) * 85 + 105
                     }px)`
-                } else if (imgIndex === product.photo.length - 3) {
+                } else if (imgIndex === product.photo.split(',').length - 3) {
                     productSmall.current.style.transform = `translateX(-${
                         (imgIndex - 3) * 85 + 105
                     }px)`
@@ -130,13 +130,12 @@ export default function ProductBody(props) {
     const { addToCart, addToWishList } = useContext(CartContext)
 
     const cartClick = () => {
-        console.log(product, countCart)
-        // setLoading(1)
-        // setTimeout(() => {
-        //     setLoading(0)
-        //     addToCart(product, countCart)
-        // }, 500)
-        // setCountCart(1)
+        setLoading(1)
+        setTimeout(() => {
+            setLoading(0)
+            addToCart(product, countCart)
+        }, 500)
+        setCountCart(1)
     }
 
     const wishListClick = () => {
@@ -181,7 +180,7 @@ export default function ProductBody(props) {
                 >
                     <div className="product-small" ref={productSmall}>
                         {product.photo &&
-                            product.photo.map((item, index) => {
+                            product.photo.split(',').map((item, index) => {
                                 return (
                                     <div
                                         key={index}
@@ -222,7 +221,7 @@ export default function ProductBody(props) {
                             )}
                         </div>
                         {product.photo &&
-                            product.photo.map((item, index) => {
+                            product.photo.split(',').map((item, index) => {
                                 const width = sliderWidth.current.offsetWidth
                                 return (
                                     <div
@@ -262,8 +261,9 @@ export default function ProductBody(props) {
                             className="change-product right"
                             onClick={() => {
                                 if (
-                                    imgIndex < product.photo.length &&
-                                    product.photo.length
+                                    imgIndex <
+                                        product.photo.split(',').length &&
+                                    product.photo.split(',').length
                                 )
                                     setImgIndex(imgIndex + 1)
                             }}

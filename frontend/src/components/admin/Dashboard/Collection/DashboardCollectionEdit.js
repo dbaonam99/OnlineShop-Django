@@ -290,7 +290,9 @@ export default function DashboardCollectionEdit(props) {
                                                 className="order-list-item"
                                             >
                                                 <img
-                                                    src={item.photo[0]}
+                                                    src={
+                                                        item.photo.split(',')[0]
+                                                    }
                                                     alt=""
                                                 ></img>
                                                 <p style={{ width: '55%' }}>

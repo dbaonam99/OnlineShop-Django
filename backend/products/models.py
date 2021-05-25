@@ -1,5 +1,4 @@
-from django.contrib.auth import get_user_model 
-from django.contrib.postgres.fields import ArrayField
+from django.contrib.auth import get_user_model
 from django.db import models
 
 class Category(models.Model):
@@ -23,25 +22,25 @@ class ProductSize(models.Model):
 
 
 class Product(models.Model):
+    category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
+    name = models.CharField(max_length=200, db_index=True)
     MAN = 'MAN'
     WOMAN = 'WOMAN'
     SEX_CHOICES = [
         (MAN, 'Man'),
         (WOMAN, 'Woman')
     ]
-    category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
-    name = models.CharField(max_length=200, db_index=True)
+    sex = models.CharField(
+        max_length=5, 
+        choices=SEX_CHOICES,
+    )
     slug = models.SlugField(max_length=200, db_index=True)
     description = models.TextField(blank=True)
     price = models.IntegerField()
     sale = models.IntegerField()
-    sex = models.CharField(
-        max_length=5,
-        choices=SEX_CHOICES,
-    )
     available = models.BooleanField(default=True)
     size = models.ManyToManyField(ProductSize, related_name="product_size") 
-    photo = ArrayField(models.CharField(max_length=255),default=list)
+    photo = models.TextField(blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     final_price = models.IntegerField()
@@ -54,7 +53,7 @@ class Product(models.Model):
 
     @property
     def final_price(self):
-        return (self.price - self.price * self.sale / 100)
+        return (self.price - (self.price * self.sale / 100))
 
 
 class ProductVote(models.Model): 

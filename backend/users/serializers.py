@@ -5,26 +5,19 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
-    password1 = serializers.CharField(write_only=True)
-    password2 = serializers.CharField(write_only=True)
-
-    def validate(self, data):
-        if data['password1'] != data['password2']:
-            raise serializers.ValidationError('Passwords must match.')
-        return data
 
     def create(self, validated_data):
         data = {
             key: value for key, value in validated_data.items()
-            if key not in ('password1', 'password2')
+            if key not in ('password')
         }
-        data['password'] = validated_data['password1']
+        data['password'] = validated_data['password']
         return self.Meta.model.objects.create_user(**data)
 
     class Meta:
         model = get_user_model()
         fields = (
-            'id', 'username', 'password1', 'password2',
+            'id', 'username', 'password',
             'first_name', 'last_name',
         )
         read_only_fields = ('id',)
@@ -38,4 +31,15 @@ class LogInSerializer(TokenObtainPairSerializer):
         for key, value in user_data.items():
             if key != 'id':
                 token[key] = value
+        token['name'] = "1123123"
         return token
+
+class UserManagerSerializer(serializers.ModelSerializer):
+    orders_creator = serializers.PrimaryKeyRelatedField(
+        many=True,
+        read_only=True
+    )
+    class Meta:
+        model = get_user_model()
+        fields = ('id', 'username',
+            'first_name', 'last_name','orders_creator')

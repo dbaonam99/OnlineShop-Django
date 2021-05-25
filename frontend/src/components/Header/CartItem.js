@@ -86,7 +86,7 @@ export default function CartItem(props) {
                             <div className="cart-product-img">
                                 {item.photo && (
                                     <img
-                                        src={`${item.photo[1]}`}
+                                        src={`${item.photo.split(',')[0]}`}
                                         width="80px"
                                         height="100%"
                                         alt=""

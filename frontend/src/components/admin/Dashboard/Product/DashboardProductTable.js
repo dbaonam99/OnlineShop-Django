@@ -305,7 +305,9 @@ export default function DashboardProductTable(props) {
                                             style={{ display: 'flex' }}
                                         >
                                             <img
-                                                src={`${item.photo[0]}`}
+                                                src={`${
+                                                    item.photo.split(',')[0]
+                                                }`}
                                                 width="70px"
                                                 height="80px"
                                                 style={{ padding: '5px 0' }}

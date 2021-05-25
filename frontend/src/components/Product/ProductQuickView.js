@@ -22,18 +22,18 @@ function ProductQuickView(props) {
     const [toast, setToast] = useState(false)
     const product = props.product
 
-    // let ratingList = product.productVote.map(a => a.ratingStar); // get all rating
-    // const totalRating = ratingList.reduce((a, b) => a + b, 0)
-    // const averageRating = totalRating/ratingList.length;
+    let ratingList = product.votes.map((a) => a.star) // get all rating
+    const totalRating = ratingList.reduce((a, b) => a + b, 0)
+    const averageRating = totalRating / ratingList.length
 
-    // const ratingStar = {
-    //     size: 12,
-    //     value: averageRating || 0,
-    //     edit: false,
-    //     activeColor: "#fda32a",
-    //     color: "#ddd",
-    //     isHalf: true
-    // };
+    const ratingStar = {
+        size: 12,
+        value: averageRating || 0,
+        edit: false,
+        activeColor: '#fda32a',
+        color: '#ddd',
+        isHalf: true,
+    }
 
     const settings = {
         infinite: true,
@@ -46,14 +46,13 @@ function ProductQuickView(props) {
     const { addToCart } = useContext(CartContext)
 
     const cartClick = () => {
-        console.log('check')
-        console.log(props.product, countCart)
-        // addToCart(props.product, countCart)
-        // setToast(true)
-        // setTimeout(() => {
-        //     setToast(false)
-        // }, 2000)
+        addToCart(props.product, countCart)
+        setToast(true)
+        setTimeout(() => {
+            setToast(false)
+        }, 2000)
     }
+
     const redirect = () => {
         window.scrollTo(0, 0)
         props.history.push(`/products/${props.product.id}`)
@@ -110,7 +109,7 @@ function ProductQuickView(props) {
                         </div>
                         {props.view === true && (
                             <Slider {...settings}>
-                                {product.productImg.map((item, index) => {
+                                {product.photo.split(',').map((item, index) => {
                                     return (
                                         <img
                                             key={index}
@@ -135,13 +134,13 @@ function ProductQuickView(props) {
                                 redirect()
                             }}
                         >
-                            {product.productName}
+                            {product.name}
                         </div>
                         <div
                             className="product-info-des"
                             style={{ width: '80%' }}
                         >
-                            {product.productDes}
+                            {product.description}
                         </div>
                         <div
                             className="product-info-vote"
@@ -151,12 +150,12 @@ function ProductQuickView(props) {
                                 redirect()
                             }}
                         >
-                            {/* <ReactStars {...ratingStar} />
-                            <p style={{margin: '0'}}>
+                            <ReactStars {...ratingStar} />
+                            <p style={{ margin: '0' }}>
                                 ({ratingList.length} customer reviews)
-                            </p> */}
+                            </p>
                         </div>
-                        {product.productFinalPrice < product.productPrice && (
+                        {product.final_price < product.price && (
                             <div
                                 className="product-info-price"
                                 style={{ marginTop: '30px' }}
@@ -169,7 +168,7 @@ function ProductQuickView(props) {
                                         fontSize: '12px',
                                     }}
                                 >
-                                    {product.productPrice
+                                    {product.price
                                         .toString()
                                         .replace(
                                             /\B(?=(\d{3})+(?!\d))/g,
@@ -178,7 +177,7 @@ function ProductQuickView(props) {
                                     Đ
                                 </span>
                                 <span>
-                                    {product.productFinalPrice
+                                    {product.final_price
                                         .toString()
                                         .replace(
                                             /\B(?=(\d{3})+(?!\d))/g,
@@ -188,7 +187,7 @@ function ProductQuickView(props) {
                                 </span>
                             </div>
                         )}
-                        {product.productFinalPrice === product.productPrice && (
+                        {product.final_price === product.price && (
                             <div
                                 className="product-info-price"
                                 style={{ marginTop: '30px' }}
@@ -243,11 +242,6 @@ function ProductQuickView(props) {
                                 <FontAwesomeIcon icon={faCartPlus} />
                                 <p>Add to cart</p>
                             </div>
-                            <div className="product-info-wishlist flex-center">
-                                <FontAwesomeIcon
-                                    icon={faHeart}
-                                ></FontAwesomeIcon>
-                            </div>
                         </div>
                         <div className="product-info-line"></div>
                         <div className="product-info-cate flex">
@@ -259,14 +253,14 @@ function ProductQuickView(props) {
                                             product.productSex === 'Man'
                                                 ? 'men'
                                                 : 'women'
-                                        }/${product.productCate
+                                        }/${product.category_name
                                             .toLowerCase()
                                             .split(' ')
                                             .join('-')}`
                                     )
                                 }}
                             >
-                                {product.productCate}
+                                {product.category_name}
                             </p>
                         </div>
                         <div className="product-info-line"></div>

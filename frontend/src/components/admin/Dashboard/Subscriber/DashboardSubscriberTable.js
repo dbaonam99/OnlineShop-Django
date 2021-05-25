@@ -12,13 +12,13 @@ export default function DashboardSubscriberTable(props) {
     const [constEmail, setConstEmail] = useState([])
 
     useEffect(() => {
-        axios.get(`http://pe.heromc.net:4000/email`).then((res) => {
-            setEmail(res.data)
-            setConstEmail(res.data)
-        })
+        axios
+            .get(`http://localhost:8000/api/subscribers/?format=json`)
+            .then((res) => {
+                setEmail(res.data)
+                setConstEmail(res.data)
+            })
     }, [props.isChange])
-
-    console.log(email)
 
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 5
@@ -211,21 +211,10 @@ export default function DashboardSubscriberTable(props) {
                             </tr>
                             {current.map((item, index) => {
                                 let count = 0
-                                for (let i in item.sendedEmail) {
-                                    if (item.sendedEmail[i].isSeen === true) {
-                                        count++
-                                    }
-                                }
                                 return (
                                     <tr key={index}>
                                         <td className="table-mobile-subscribername">
-                                            <p>{item.subscriberEmail}</p>
-                                        </td>
-                                        <td className="table-mobile-subscribersent">
-                                            <p>{item.sendedEmail.length}</p>
-                                        </td>
-                                        <td className="table-mobile-subscriberread">
-                                            <p>{count}</p>
+                                            <p>{item.email}</p>
                                         </td>
                                         <td>
                                             <div className="action-table flex">

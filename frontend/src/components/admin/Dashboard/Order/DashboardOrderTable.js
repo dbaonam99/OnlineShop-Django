@@ -2,24 +2,23 @@ import React, { useEffect, useState } from 'react'
 import '../../../../App.css'
 import '../../../../Styles/Dashboard.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPencilAlt, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios'
 import classNames from 'classnames'
 
 export default function DashboardUserTable(props) {
     const [order, setOrder] = useState([])
-    const [isSortByName, setIsSortByName] = useState(false)
-    const [isSortByTotal, setIsSortByTotal] = useState(false)
+    const [isChanged, setIsChanged] = useState(false)
     const [constOrder, setConstOrder] = useState([])
 
     useEffect(() => {
-        // axios.get(`http://127.0.0.1:8000/order`)
-        //     .then(res => {
-        //         setOrder(res.data)
-        //         setConstOrder(res.data)
-        //     }
-        // )
-    }, [props.isChange])
+        axios
+            .get(`http://localhost:8000/api/orders/?format=json`)
+            .then((res) => {
+                setOrder(res.data)
+                setConstOrder(res.data)
+            })
+    }, [props.isChange, isChanged])
 
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 5
@@ -107,10 +106,11 @@ export default function DashboardUserTable(props) {
     const deleteOnClick = (event) => {
         const id = event.target.id
         axios
-            .post(`http://127.0.0.1:8000/order/delete/:${event.target.id}`, {
+            .delete(`http://localhost:8000/api/orders/${event.target.id}`, {
                 id: id,
             })
             .then(() => {
+                setIsChanged(!isChanged)
                 setOrder(
                     order.filter((item) => {
                         return item.id !== id
@@ -122,66 +122,20 @@ export default function DashboardUserTable(props) {
     const searchOnSubmit = (event) => {
         event.preventDefault()
     }
+
     const searchOnChange = (event) => {
         const searchInput = event.target.value
         const search = []
         for (let i in constOrder) {
-            if (constOrder[i].orderName.toLowerCase().includes(searchInput)) {
+            if (
+                constOrder[i].customer_name.toLowerCase().includes(searchInput)
+            ) {
                 search.push(constOrder[i])
-            } else if (constOrder[i].orderId.toString().includes(searchInput)) {
+            } else if (constOrder[i].id.toString().includes(searchInput)) {
                 search.push(constOrder[i])
             }
         }
         setOrder(search)
-    }
-
-    const sortTable = (event) => {
-        if (event.target.id === 'OrderOrderInfo') {
-            if (isSortByName) {
-                const sortByName = [...order]
-                sortByName.sort(function (a, b) {
-                    var orderA = a.orderName.toLowerCase()
-                    var orderB = b.orderName.toLowerCase()
-                    if (orderA === orderB) return 0
-                    return orderA > orderB ? 1 : -1
-                })
-                setIsSortByName(false)
-                setOrder(sortByName)
-            } else {
-                const sortByName = [...order]
-                sortByName.sort(function (a, b) {
-                    var orderA = a.orderName.toLowerCase()
-                    var orderB = b.orderName.toLowerCase()
-                    if (orderA === orderB) return 0
-                    return orderA < orderB ? 1 : -1
-                })
-                setIsSortByName(true)
-                setOrder(sortByName)
-            }
-        }
-        if (event.target.id === 'OrderTotalMoney') {
-            if (isSortByTotal) {
-                const sortByTotal = [...order]
-                sortByTotal.sort(function (a, b) {
-                    var totalA = a.orderTotal
-                    var totalB = b.orderTotal
-                    if (totalA === totalB) return 0
-                    return totalA > totalB ? 1 : -1
-                })
-                setIsSortByTotal(false)
-                setOrder(sortByTotal)
-            } else {
-                const sortByTotal = [...order]
-                sortByTotal.sort(function (a, b) {
-                    var totalA = a.orderTotal
-                    var totalB = b.orderTotal
-                    if (totalA === totalB) return 0
-                    return totalA < totalB ? 1 : -1
-                })
-                setIsSortByTotal(true)
-                setOrder(sortByTotal)
-            }
-        }
     }
 
     return (
@@ -195,12 +149,6 @@ export default function DashboardUserTable(props) {
                 </div>
                 <div className="topfive-content flex-col">
                     <div className="dashboard-addnew flex">
-                        <div
-                            className="dashboard-addnew-btn btn"
-                            onClick={props.setOpenCreateFunc}
-                        >
-                            Add new
-                        </div>
                         <div className="dashboard-addnew-search">
                             <form onSubmit={searchOnSubmit}>
                                 <input
@@ -222,9 +170,6 @@ export default function DashboardUserTable(props) {
                                         <th
                                             key={index}
                                             className="table-new-title table-order-title"
-                                            onClick={(event) => {
-                                                sortTable(event)
-                                            }}
                                             id={`Order${item
                                                 .split(' ')
                                                 .join('')}`}
@@ -235,7 +180,7 @@ export default function DashboardUserTable(props) {
                                 })}
                             </tr>
                             {current.map((item, index) => {
-                                const date = new Date(item.orderDate)
+                                const date = new Date(item.created)
                                 const day = date.getDate()
                                 const month = date.getMonth() + 1
                                 const year = date.getFullYear()
@@ -254,10 +199,10 @@ export default function DashboardUserTable(props) {
                                                             fontWeight: 'bold',
                                                         }}
                                                     >
-                                                        #{item.orderId}
+                                                        #{item.id}
                                                     </p>
                                                     <p className="mobile-table-name">
-                                                        by {item.orderName}
+                                                        by {item.customer_name}
                                                     </p>
                                                 </li>
                                             </ul>
@@ -276,9 +221,9 @@ export default function DashboardUserTable(props) {
                                                         WebkitLineClamp: '3',
                                                     }}
                                                 >
-                                                    {item.orderAddress},{' '}
-                                                    {item.orderHuyen},{' '}
-                                                    {item.orderTinh}
+                                                    {item.customer_address},{' '}
+                                                    {item.customer_district},{' '}
+                                                    {item.customer_province}
                                                 </p>
                                             </div>
                                         </td>
@@ -293,7 +238,7 @@ export default function DashboardUserTable(props) {
                                                     textTransform: 'capitalize',
                                                 }}
                                             >
-                                                {item.orderPaymentMethod}
+                                                {item.payment_method}
                                             </p>
                                         </td>
                                         <td>
@@ -314,7 +259,7 @@ export default function DashboardUserTable(props) {
                                                             marginLeft: '20px',
                                                         }}
                                                     >
-                                                        {totalItem}
+                                                        {/* {item.total_amount} */}
                                                     </p>
                                                 </div>
                                             )}
@@ -324,21 +269,6 @@ export default function DashboardUserTable(props) {
                                         </td>
                                         <td>
                                             <div className="action-table flex">
-                                                <div
-                                                    className="action-item flex-center action-green"
-                                                    onClick={
-                                                        props.setOpenEditFunc
-                                                    }
-                                                    id={item.id}
-                                                >
-                                                    <FontAwesomeIcon
-                                                        style={{
-                                                            pointerEvents:
-                                                                'none',
-                                                        }}
-                                                        icon={faPencilAlt}
-                                                    />
-                                                </div>
                                                 <div
                                                     className="action-item flex-center action-red"
                                                     onClick={deleteOnClick}

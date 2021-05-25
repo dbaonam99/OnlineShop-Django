@@ -22,69 +22,59 @@ function Account(props) {
         setUser({ ...user, [event.target.name]: event.target.value })
     }
 
-    const handleOnSubmit = (event) => {
+    const handleOnSubmit = async (event) => {
         event.preventDefault()
         if (tabID === 0) {
             axios
-                .post('http://127.0.0.1:8000/users/login', {
-                    loginEmail: user.loginEmail,
-                    loginPassword: user.loginPassword,
+                .post('http://127.0.0.1:8000/api/log_in/', {
+                    username: user.loginEmail,
+                    password: user.loginPassword,
+                })
+                .then((res) => {
+                    console.log(res)
+                    // setArrSuccess((arrSuccess) => [
+                    //     ...arrSuccess,
+                    //     'Đăng nhập thành công!',
+                    // ])
+                    // setTimeout(() => {
+                    //     window.location.reload(false)
+                    //     document.body.style.overflow = 'unset'
+                    // }, 1000)
+                    // localStorage.setItem('token', res.data.access)
+                    // localStorage.setItem('user-id', user.loginEmail)
+                })
+                .catch((err) => {
+                    setArrErr((arrErr) => [...arrErr, 'Đăng nhập thất bại!'])
+                })
+        } else {
+            axios
+                .post('http://127.0.0.1:8000/api/sign_up/', {
+                    username: user.registerName,
+                    password: user.registerPassword,
+                    customer_role: 'user',
                 })
                 .then((res) => {
                     setArrSuccess((arrSuccess) => [
                         ...arrSuccess,
-                        'Login success!',
+                        'Đăng ký thành công!',
                     ])
                     setTimeout(() => {
                         window.location.reload(false)
                         document.body.style.overflow = 'unset'
                     }, 1000)
-                    localStorage.setItem('token', res.data.token)
-                    localStorage.setItem('user-id', res.data.user.id)
                 })
-                .catch((err) => {
-                    setArrErr((arrErr) => [...arrErr, err.response.data])
-                })
-        } else {
-            console.log({
-                userName: user.registerName,
-                userEmail: user.registerEmail,
-                userPassword: user.registerPassword,
-                userRole: 'user',
-            })
-            // axios
-            //     .post('http://127.0.0.1:8000/users/', {
-            //         userName: user.registerName,
-            //         userEmail: user.registerEmail,
-            //         userPassword: user.registerPassword,
-            //         userRole: 'user',
-            //     })
-            //     .then((res) => {
-            //         setArrSuccess((arrSuccess) => [...arrSuccess, res.data])
-            //         setTimeout(() => {
-            //             window.location.reload(false)
-            //             document.body.style.overflow = 'unset'
-            //         }, 1000)
-            //     })
-            //     .catch((err) => {
-            //         setArrErr((arrErr) => [...arrErr, err.response.data])
-            //     })
+                .catch(() =>
+                    setArrErr((arrErr) => [...arrErr, 'Tài khoản đã tồn tại'])
+                )
         }
     }
 
     useEffect(() => {
         axios
             .get(
-                `http://127.0.0.1:8000/users/${localStorage.getItem(
+                `http://127.0.0.1:8000/api/users/${localStorage.getItem(
                     'user-id'
-                )}`,
-                {
-                    headers: {
-                        authorization: `Bearer ${localStorage.getItem(
-                            'token'
-                        )}`,
-                    },
-                }
+                )}`
             )
             .then((res) => {
                 setUserInfoFunc(res.data.user)
@@ -206,8 +196,8 @@ function Account(props) {
                                     onSubmit={handleOnSubmit}
                                 >
                                     <input
-                                        type="email"
-                                        placeholder="Email"
+                                        type="username"
+                                        placeholder="Username"
                                         name="loginEmail"
                                         onChange={handleOnChange}
                                     />
@@ -262,12 +252,6 @@ function Account(props) {
                                         type="text"
                                         placeholder="Name"
                                         name="registerName"
-                                        onChange={handleOnChange}
-                                    />
-                                    <input
-                                        type="email"
-                                        placeholder="Email"
-                                        name="registerEmail"
                                         onChange={handleOnChange}
                                     />
                                     <input

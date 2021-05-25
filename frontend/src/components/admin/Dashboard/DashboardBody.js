@@ -12,8 +12,6 @@ import DashboardUser from './User/DashboardUser'
 import DashboardUserCreate from './User/DashboardUserCreate'
 import DashboardUserEdit from './User/DashboardUserEdit'
 import DashboardOrder from './Order/DashboardOrder'
-import DashboardOrderEdit from './Order/DashboardOrderEdit'
-import DashboardOrderCreate from './Order/DashboardOrderCreate'
 import DashboardCollection from './Collection/DashboardCollection'
 import DashboardCollectionEdit from './Collection/DashboardCollectionEdit'
 import DashboardCollectionCreate from './Collection/DashboardCollectionCreate'
@@ -27,7 +25,7 @@ export default function DashboardBody(props) {
     const [isChange, setIsChange] = useState(false)
     const [product, setProduct] = useState({})
     const [collection, setCollection] = useState({})
-    const [subscriber, setSibscriber] = useState({})
+    const [subscriber, setSubscriber] = useState({})
     const [user, setUser] = useState({})
     const [order, setOrder] = useState({})
 
@@ -53,6 +51,11 @@ export default function DashboardBody(props) {
         ).then((res) => {
             setCollection(res.data)
         })
+        Axios.get(
+            `http://localhost:8000/api/subscribers/${props.productId}?format=json`
+        ).then((res) => {
+            setSubscriber(res.data)
+        })
         // Axios.get(`http://127.0.0.1:8000/users/list/${props.productId}`)
         //     .then(res => {
         //         setUser(res.data)
@@ -76,19 +79,6 @@ export default function DashboardBody(props) {
                     className="DashboardBody-closemenu"
                     onClick={props.setOpenMenuOnClick}
                 ></div>
-            )}
-            {props.openCreate && tabId === '2' && (
-                <DashboardOrderCreate
-                    setCloseCreateFunc={props.setCloseCreateFunc}
-                    setToastFunc={setToastFunc}
-                />
-            )}
-            {props.openEdit && tabId === '2' && (
-                <DashboardOrderEdit
-                    setCloseEditFunc={props.setCloseEditFunc}
-                    setToastFunc={setToastFunc}
-                    order={order}
-                />
             )}
             {props.openCreate && tabId === '3' && (
                 <DashboardProductCreate

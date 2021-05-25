@@ -3,10 +3,6 @@ import { UserContext } from '../contexts/User'
 import '../Styles/BannerV4.css'
 import axios from 'axios'
 import { withRouter } from 'react-router-dom'
-import { ZaloPay } from './ZaloPay/zalopay'
-import QRCode from 'qrcode.react'
-import { APIs } from './ZaloPay/common'
-import $ from 'jquery'
 
 function CheckoutBody(props) {
     const [tinh, setTinh] = useState([])
@@ -174,7 +170,9 @@ function CheckoutBody(props) {
                                         >
                                             <div style={{ width: '300px' }}>
                                                 <img
-                                                    src={`${item.photo[0]}`}
+                                                    src={`${
+                                                        item.photo.split(',')[0]
+                                                    }`}
                                                     alt=""
                                                     width="60px"
                                                     height="60px"
@@ -463,7 +461,7 @@ function CheckoutBody(props) {
                                         className="billing-detail-item"
                                     >
                                         <img
-                                            src={`${item.photo[0]}`}
+                                            src={`${item.photo.split(',')[0]}`}
                                             alt=""
                                             width="60px"
                                             height="60px"
@@ -608,29 +606,6 @@ function CheckoutBody(props) {
                                                 description: description,
                                                 amount: total,
                                             }
-                                            ZaloPay.qr(order, (res) => {
-                                                showQR(res.orderurl)
-                                                const check = setInterval(
-                                                    () => {
-                                                        $.getJSON(
-                                                            APIs.GETORDERSTATUS +
-                                                                '?morderid=' +
-                                                                res.apptransid
-                                                        ).done((res) => {
-                                                            if (
-                                                                res.returncode ===
-                                                                1
-                                                            ) {
-                                                                setIsPaid(true)
-                                                                clearInterval(
-                                                                    check
-                                                                )
-                                                            }
-                                                        })
-                                                    },
-                                                    1000
-                                                )
-                                            })
                                         }}
                                     >
                                         <div
@@ -649,9 +624,6 @@ function CheckoutBody(props) {
                         <div
                             className={isShowQR ? 'qr-box flex-col' : 'd-none'}
                         >
-                            <div className="qr-code-box flex-center">
-                                <QRCode value={qrValue}></QRCode>
-                            </div>
                             {!isPaid && (
                                 <div
                                     className="qr-status"

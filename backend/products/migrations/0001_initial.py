@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
                 ('slug', models.SlugField(max_length=200)),
                 ('image', models.ImageField(blank=True, upload_to='products/%Y/%m/%d')),
                 ('description', models.TextField(blank=True)),
-                ('photo', ArrayField(models.CharField(max_length=140, default=list))),
+                ('photo', models.TextField(blank=True)),
                 ('price', models.IntegerField()),
                 ('sale', models.IntegerField()),
                 ('sex', models.CharField(choices=[('MAN', 'Man'), ('WOMAN', 'Woman')], max_length=5)),

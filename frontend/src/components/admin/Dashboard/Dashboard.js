@@ -52,7 +52,7 @@ function Dashboard(props) {
             icon: faEnvelope,
         },
     ]
-    const [tabId, setTabId] = useState('5')
+    const [tabId, setTabId] = useState('1')
     const [openMenu, setOpenMenu] = useState(true)
     const [openMenuMobile, setOpenMenuMobile] = useState(true)
     const [productId, setProductId] = useState('')
