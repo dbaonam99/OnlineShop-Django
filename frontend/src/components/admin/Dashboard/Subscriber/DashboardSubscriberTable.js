@@ -216,6 +216,12 @@ export default function DashboardSubscriberTable(props) {
                                         <td className="table-mobile-subscribername">
                                             <p>{item.email}</p>
                                         </td>
+                                        <td className="table-mobile-subscribername">
+                                            <p>1</p>
+                                        </td>
+                                        <td className="table-mobile-subscribername">
+                                            <p>0</p>
+                                        </td>
                                         <td>
                                             <div className="action-table flex">
                                                 <div

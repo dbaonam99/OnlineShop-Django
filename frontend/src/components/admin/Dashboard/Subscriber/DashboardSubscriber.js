@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 
 export default function DashboardSubscriber(props) {
-    const table = ['Email', 'Action']
+    const table = ['Email', 'Sent', 'Read', 'Action']
 
     return (
         <div className="dashboard-product">

@@ -12,6 +12,8 @@ import DashboardTotalCount from './DashboardTotalCount'
 import DashboardLocation from './DashboardLocation'
 import axios from 'axios'
 import DashboardChartLine from './DashboardChartLine'
+import DashboardChartPie from './DashboardChartPie'
+import DashboardChart from './DashboardChart'
 
 export default function DashboardMain() {
     const [products, setProducts] = useState([])
@@ -263,6 +265,14 @@ export default function DashboardMain() {
                 })}
             </div>
             <DashboardLocation order={order} />
+            <div className="row flex">
+                <DashboardChartPie email={email} color="pink" />
+                <DashboardChart
+                    products={products}
+                    order={order}
+                    color="lightblue"
+                />
+            </div>
             <div className="row flex">
                 <DashboardChartLine icon={faTasks} order={order} color="pink" />
             </div>

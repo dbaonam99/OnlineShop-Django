@@ -25,13 +25,21 @@ class UserSerializer(serializers.ModelSerializer):
             if attr == 'password':
                 instance.set_password(validated_data["password"])
                 instance.save()
+        instance.email = validated_data.get('email', instance.email)
+        instance.name = validated_data.get('name', instance.name)
+        instance.phone = validated_data.get('phone', instance.phone)
+        instance.province = validated_data.get('province', instance.province)
+        instance.district = validated_data.get('district', instance.district)
+        instance.address = validated_data.get('address', instance.address)
+        instance.photo = validated_data.get('photo', instance.photo)
+        instance.save()
         return instance 
 
     class Meta:
         model = get_user_model()
         fields = (
             'id', 'username','name', 'password', 'email', 'phone',
-            'province', 'district', 'orderUser', 'district', 'role', 'photo', 'address'
+            'province', 'district', 'orderUser', 'role', 'photo', 'address'
         )
         read_only_fields = ('id',)
 

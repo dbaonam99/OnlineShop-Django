@@ -8,6 +8,7 @@ import DashboardProduct from './Product/DashboardProduct'
 import DashboardProductEdit from './Product/DashboardProductEdit'
 import DashboardProductCreate from './Product/DashboardProductCreate'
 import Axios from 'axios'
+import DashboardInbox from './Inbox/DashboardInbox'
 import DashboardUser from './User/DashboardUser'
 import DashboardUserCreate from './User/DashboardUserCreate'
 import DashboardOrder from './Order/DashboardOrder'
@@ -144,6 +145,7 @@ export default function DashboardBody(props) {
                     isChange={isChange}
                 />
             )}
+            {tabId === '7' && <DashboardInbox />}
         </div>
     )
 }

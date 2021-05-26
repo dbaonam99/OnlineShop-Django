@@ -17,6 +17,7 @@ import { ChatProvider } from './contexts/Chat'
 import LoadingPage from './components/LoadingPage'
 import Toast from './components/Toast'
 import Checkout from './pages/Checkout'
+import OpenChatBtn from './components/OpenChatBtn'
 
 function App(props) {
     const [loading, setLoading] = useState(true)
@@ -107,6 +108,7 @@ function App(props) {
                                     component={Checkout}
                                 ></Route>
                             </div>
+                            <OpenChatBtn />
                         </Router>
                     )}
                 </ChatProvider>

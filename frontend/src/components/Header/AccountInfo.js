@@ -88,7 +88,6 @@ function AccountInfo(props) {
                 username: userInfo.username,
                 name: userName,
                 email: userEmail,
-                password: userPassword,
                 phone: userPhone,
                 province: userTinh,
                 district: userHuyen,
@@ -97,7 +96,6 @@ function AccountInfo(props) {
                 photo: res.data.url,
                 password: userPassword,
             }
-            localStorage.removeItem('token')
             axios
                 .put(`http://127.0.0.1:8000/api/profile/`, data, {
                     headers: {
@@ -108,7 +106,6 @@ function AccountInfo(props) {
                 })
                 .then((res) => {
                     setUserInfoFunc(res.data)
-                    localStorage.setItem('token', res.data.token)
                     setToast(true)
                     setTimeout(() => {
                         setToast(false)
@@ -119,7 +116,6 @@ function AccountInfo(props) {
                 username: userInfo.username,
                 name: userName,
                 email: userEmail,
-                password: userPassword,
                 phone: userPhone,
                 province: userTinh,
                 district: userHuyen,
@@ -137,8 +133,8 @@ function AccountInfo(props) {
                     },
                 })
                 .then((res) => {
+                    console.log(res)
                     setUserInfoFunc(res.data)
-                    localStorage.setItem('token', res.data.token)
                     setToast(true)
                     setTimeout(() => {
                         setToast(false)

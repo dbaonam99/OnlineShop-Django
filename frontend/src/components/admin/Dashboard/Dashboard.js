@@ -10,6 +10,7 @@ import {
     faShoppingBag,
     faTshirt,
     faUser,
+    faInbox,
 } from '@fortawesome/free-solid-svg-icons'
 import Axios from 'axios'
 import { withRouter } from 'react-router-dom'
@@ -45,6 +46,11 @@ function Dashboard(props) {
             id: '6',
             name: 'Subscribers',
             icon: faEnvelope,
+        },
+        {
+            id: '7',
+            name: 'Live Chat',
+            icon: faInbox,
         },
     ]
     const [tabId, setTabId] = useState('1')
