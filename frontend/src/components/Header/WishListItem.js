@@ -49,7 +49,7 @@ export default function WishListItem(props) {
                                 >
                                     {item.name}
                                 </div>
-                                {item.final_price && (
+                                {item.finalPrice && (
                                     <div
                                         className="cart-product-price wl-mb-price flex"
                                         style={{
@@ -57,7 +57,7 @@ export default function WishListItem(props) {
                                             justifyContent: 'flex-start',
                                         }}
                                     >
-                                        {item.final_price
+                                        {item.finalPrice
                                             .toString()
                                             .replace(
                                                 /\B(?=(\d{3})+(?!\d))/g,

@@ -93,7 +93,7 @@ export default function CartItem(props) {
                                     ></img>
                                 )}
                             </div>
-                            {item.final_price && (
+                            {item.finalPrice && (
                                 <div className="cart-product-mobile flex">
                                     <div
                                         className="cart-product-name flex"
@@ -160,7 +160,7 @@ export default function CartItem(props) {
                                             justifyContent: 'center',
                                         }}
                                     >
-                                        {item.final_price
+                                        {item.finalPrice
                                             .toString()
                                             .replace(
                                                 /\B(?=(\d{3})+(?!\d))/g,
@@ -175,7 +175,7 @@ export default function CartItem(props) {
                                             justifyContent: 'center',
                                         }}
                                     >
-                                        {(item.final_price * item.count)
+                                        {(item.finalPrice * item.count)
                                             .toString()
                                             .replace(
                                                 /\B(?=(\d{3})+(?!\d))/g,

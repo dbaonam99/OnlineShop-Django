@@ -48,8 +48,10 @@ export default function DashboardMain() {
                 var totalIncome = 0
                 var totalSale = 0
                 for (let i in res.data) {
-                    totalSale += res.data[i].total_amount
-                    totalIncome += res.data[i].total_money
+                    totalIncome += res.data[i].totalAmount
+                    for (let j in res.data[i].orderProduct) {
+                        totalSale += res.data[i].orderProduct[j].quantity
+                    }
                 }
                 setTotalSale(totalSale)
                 setTotalIncome(totalIncome)
@@ -79,7 +81,7 @@ export default function DashboardMain() {
                             currentYear
                     ) {
                         currentOrder.push(res.data[i])
-                        currentTotalIncome += res.data[i].total_money
+                        currentTotalIncome += res.data[i].totalAmount
                     }
                     if (
                         new Date(res.data[i].created).getMonth() + 1 ===
@@ -87,7 +89,7 @@ export default function DashboardMain() {
                         new Date(res.data[i].created).getFullYear() === lastYear
                     ) {
                         lastMonthOrder.push(res.data[i])
-                        lastCurrentTotalIncome += res.data[i].total_money
+                        lastCurrentTotalIncome += res.data[i].totalAmount
                     }
                 }
                 for (let i in res.data) {
@@ -97,14 +99,14 @@ export default function DashboardMain() {
                         new Date(res.data[i].created).getFullYear() ===
                             currentYear
                     ) {
-                        currentTotalSale += res.data[i].total_amount
+                        currentTotalSale += res.data[i].totalAmount
                     }
                     if (
                         new Date(res.data[i].created).getMonth() + 1 ===
                             lastMonth &&
                         new Date(res.data[i].created).getFullYear() === lastYear
                     ) {
-                        lastCurrentTotalSale += res.data[i].total_amount
+                        lastCurrentTotalSale += res.data[i].totalAmount
                     }
                 }
 

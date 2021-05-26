@@ -1,29 +1,27 @@
-import React, { } from 'react'
+import React from 'react'
 import classNames from 'classnames'
-import {
-    Link, withRouter
-  } from "react-router-dom"; 
-import Dropdown from './Dropdown';
+import { Link, withRouter } from 'react-router-dom'
 
 function MenuItemDropdown(props) {
-    
-    const dropdownHover = props.dropdownHover;
-    const location = props.location.pathname;
+    const location = props.location.pathname
 
     return (
-        <li 
+        <li
             className="menu-item"
             onClick={props.handleClick}
             onMouseEnter={props.handleHover}
             onMouseLeave={props.handleLeaveHover}
-            >
-            <Link to={props.url}
+        >
+            <Link
+                to={props.url}
                 className={classNames({
                     active: location === props.url,
                     whitelink_header: props.whiteText === true,
                 })}
-            >{props.label}</Link>
-            {(dropdownHover === true && props.dropdownContent.length > 0) && 
+            >
+                {props.label}
+            </Link>
+            {/* {(dropdownHover === true && props.dropdownContent.length > 0) && 
                 <Dropdown 
                     className="dropdown-display"
                     dropdownContent={props.dropdownContent}
@@ -31,8 +29,8 @@ function MenuItemDropdown(props) {
                     scrolled={props.scrolled}
                     handleLeaveHover = {props.handleLeaveHover}
                 /> 
-            }
+            } */}
         </li>
     )
 }
-export default withRouter(MenuItemDropdown);
+export default withRouter(MenuItemDropdown)

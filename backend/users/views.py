@@ -5,6 +5,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .serializers import LogInSerializer, UserSerializer, UserManagerSerializer
 
+
 class SignUpView(generics.CreateAPIView):
     queryset = get_user_model().objects.all()
     serializer_class = UserSerializer
@@ -12,11 +13,12 @@ class SignUpView(generics.CreateAPIView):
 class LogInView(TokenObtainPairView):
     serializer_class = LogInSerializer
 
-class ManageUserView(generics.RetrieveUpdateAPIView): 
-    serializer_class = UserSerializer
-    permission_classes = (permissions.IsAuthenticated,)
 
-    def get_object(self): 
+class ManageUserView(generics.RetrieveUpdateAPIView):
+    """Manage the authenticated user"""
+    serializer_class = UserSerializer
+
+    def get_object(self):
         return self.request.user
 
 class UserManagerViewSet(viewsets.ModelViewSet):

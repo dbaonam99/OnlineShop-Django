@@ -30,9 +30,7 @@ export default function Search(props) {
         setSearchInput(value)
         const search = []
         for (let i in constProducts) {
-            if (
-                constProducts[i].productName.toLowerCase().includes(searchInput)
-            ) {
+            if (constProducts[i].name.toLowerCase().includes(searchInput)) {
                 search.push(constProducts[i])
             }
         }
@@ -92,7 +90,7 @@ export default function Search(props) {
                             <div className="cart-item flex" key={index}>
                                 <div className="cart-product-img">
                                     <img
-                                        src={item.productImg[0]}
+                                        src={item.photo.split(',')[0]}
                                         width="80px"
                                         height="100%"
                                         alt=""
@@ -106,7 +104,7 @@ export default function Search(props) {
                                             justifyContent: 'flex-start',
                                         }}
                                     >
-                                        {item.productName}
+                                        {item.name}
                                     </div>
                                     <div
                                         className="cart-product-price wl-mb-price flex"
@@ -115,7 +113,7 @@ export default function Search(props) {
                                             justifyContent: 'flex-start',
                                         }}
                                     >
-                                        {item.productFinalPrice
+                                        {item.finalPrice
                                             .toString()
                                             .replace(
                                                 /\B(?=(\d{3})+(?!\d))/g,

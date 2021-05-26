@@ -265,7 +265,7 @@ export default function DashboardCollectionEdit(props) {
                                             value={JSON.stringify(item)}
                                         >
                                             Name: {item.name}, Price:{' '}
-                                            {item.final_price
+                                            {item.finalPrice
                                                 .toString()
                                                 .replace(
                                                     /\B(?=(\d{3})+(?!\d))/g,

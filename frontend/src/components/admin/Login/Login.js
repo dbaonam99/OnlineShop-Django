@@ -27,19 +27,24 @@ function Login(props) {
 
     const handleOnSubmit = (event) => {
         event.preventDefault()
-        Axios.post('http://127.0.0.1:8000/users/login', {
-            loginEmail: email,
-            loginPassword: password,
+        Axios.post('http://127.0.0.1:8000/api/log_in/', {
+            username: email,
+            password: password,
         })
             .then((res) => {
-                setArrSuccess(['Login success!'])
-                setArrErr([])
-                localStorage.setItem('token', res.data.token)
-                localStorage.setItem('user-id', res.data.user.id)
-                props.history.push('/admin/dashboard')
+                if (res.data.role === 'admin') {
+                    setArrSuccess(['Login success!'])
+                    setArrErr([])
+                    localStorage.setItem('token', res.data.access)
+                    localStorage.setItem('user-id', res.data.id)
+                    props.history.push('/admin/dashboard')
+                } else {
+                    setArrErr(['Bạn không có quyền đăng nhập'])
+                    setArrSuccess([])
+                }
             })
             .catch((err) => {
-                setArrErr([err.response.data])
+                setArrErr(['Sai mật khẩu'])
                 setArrSuccess([])
             })
     }

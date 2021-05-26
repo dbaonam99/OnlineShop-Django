@@ -8,6 +8,7 @@ import classNames from 'classnames'
 
 export default function DashboardUserTable(props) {
     const [order, setOrder] = useState([])
+    const [product, setProduct] = useState([])
     const [isChanged, setIsChanged] = useState(false)
     const [constOrder, setConstOrder] = useState([])
 
@@ -17,6 +18,11 @@ export default function DashboardUserTable(props) {
             .then((res) => {
                 setOrder(res.data)
                 setConstOrder(res.data)
+            })
+        axios
+            .get(`http://localhost:8000/api/products/?format=json`)
+            .then((res) => {
+                setProduct(res.data)
             })
     }, [props.isChange, isChanged])
 
@@ -127,9 +133,7 @@ export default function DashboardUserTable(props) {
         const searchInput = event.target.value
         const search = []
         for (let i in constOrder) {
-            if (
-                constOrder[i].customer_name.toLowerCase().includes(searchInput)
-            ) {
+            if (constOrder[i].userName.toLowerCase().includes(searchInput)) {
                 search.push(constOrder[i])
             } else if (constOrder[i].id.toString().includes(searchInput)) {
                 search.push(constOrder[i])
@@ -202,7 +206,7 @@ export default function DashboardUserTable(props) {
                                                         #{item.id}
                                                     </p>
                                                     <p className="mobile-table-name">
-                                                        by {item.customer_name}
+                                                        by {item.userName}
                                                     </p>
                                                 </li>
                                             </ul>
@@ -221,9 +225,9 @@ export default function DashboardUserTable(props) {
                                                         WebkitLineClamp: '3',
                                                     }}
                                                 >
-                                                    {item.customer_address},{' '}
-                                                    {item.customer_district},{' '}
-                                                    {item.customer_province}
+                                                    {item.userAddress},{' '}
+                                                    {item.userDistrict},{' '}
+                                                    {item.userProvince}
                                                 </p>
                                             </div>
                                         </td>
@@ -232,40 +236,57 @@ export default function DashboardUserTable(props) {
                                                 {day}-{month}-{year}
                                             </p>
                                         </td>
-                                        <td className="mobile-table-paymentmethod">
-                                            <p
-                                                style={{
-                                                    textTransform: 'capitalize',
-                                                }}
-                                            >
-                                                {item.payment_method}
-                                            </p>
-                                        </td>
                                         <td>
                                             {typeof totalItem === 'number' && (
                                                 <div
                                                     key={index}
                                                     className="flex"
                                                     style={{
+                                                        flexDirection: 'column',
                                                         justifyContent:
                                                             'space-between',
                                                     }}
                                                 >
-                                                    {/* <p style={{margin: '10px 0', width: '100%', WebkitLineClamp: '2'}}>{virtualArr.productName}</p> */}
-                                                    <p
-                                                        style={{
-                                                            margin: '10px 0',
-                                                            width: '50px',
-                                                            marginLeft: '20px',
-                                                        }}
-                                                    >
-                                                        {/* {item.total_amount} */}
-                                                    </p>
+                                                    {product.length > 0 &&
+                                                        item.orderProduct.map(
+                                                            (item) => {
+                                                                return (
+                                                                    <div>
+                                                                        <p
+                                                                            style={{
+                                                                                margin: '10px 0',
+                                                                                width: '100%',
+                                                                                WebkitLineClamp:
+                                                                                    '2',
+                                                                            }}
+                                                                        >
+                                                                            {
+                                                                                product.filter(
+                                                                                    (
+                                                                                        item2
+                                                                                    ) =>
+                                                                                        item2.id ===
+                                                                                        Number(
+                                                                                            item.product
+                                                                                        )
+                                                                                )[0]
+                                                                                    .name
+                                                                            }{' '}
+                                                                            (x
+                                                                            {
+                                                                                item.quantity
+                                                                            }
+                                                                            )
+                                                                        </p>
+                                                                    </div>
+                                                                )
+                                                            }
+                                                        )}
                                                 </div>
                                             )}
                                         </td>
                                         <td className="mobile-table-totalmoney">
-                                            <p>{item.orderTotal} đ</p>
+                                            <p>{item.totalAmount} đ</p>
                                         </td>
                                         <td>
                                             <div className="action-table flex">

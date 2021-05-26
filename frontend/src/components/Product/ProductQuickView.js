@@ -155,7 +155,7 @@ function ProductQuickView(props) {
                                 ({ratingList.length} customer reviews)
                             </p>
                         </div>
-                        {product.final_price < product.price && (
+                        {product.finalPrice < product.price && (
                             <div
                                 className="product-info-price"
                                 style={{ marginTop: '30px' }}
@@ -177,7 +177,7 @@ function ProductQuickView(props) {
                                     Đ
                                 </span>
                                 <span>
-                                    {product.final_price
+                                    {product.finalPrice
                                         .toString()
                                         .replace(
                                             /\B(?=(\d{3})+(?!\d))/g,
@@ -187,7 +187,7 @@ function ProductQuickView(props) {
                                 </span>
                             </div>
                         )}
-                        {product.final_price === product.price && (
+                        {product.finalPrice === product.price && (
                             <div
                                 className="product-info-price"
                                 style={{ marginTop: '30px' }}

@@ -219,21 +219,6 @@ export default function DashboardSubscriberTable(props) {
                                         <td>
                                             <div className="action-table flex">
                                                 <div
-                                                    className="action-item flex-center action-green"
-                                                    onClick={
-                                                        props.setOpenEditFunc
-                                                    }
-                                                    id={item.id}
-                                                >
-                                                    <FontAwesomeIcon
-                                                        style={{
-                                                            pointerEvents:
-                                                                'none',
-                                                        }}
-                                                        icon={faPencilAlt}
-                                                    />
-                                                </div>
-                                                <div
                                                     className="action-item flex-center action-red"
                                                     onClick={deleteOnClick}
                                                     id={item.id}

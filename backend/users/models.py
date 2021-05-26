@@ -3,7 +3,14 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    photo = models.ImageField(upload_to='photos', null=True, blank=True)
+    photo = models.CharField(max_length=256)
+    name = models.CharField(max_length=256, blank=True, null=True)
+    phone = models.CharField(max_length=256, blank=True, null=True)
+    province = models.CharField(max_length=256, blank=True, null=True)
+    district = models.CharField(max_length=256, blank=True, null=True)
+    email = models.CharField(max_length=256, blank=True, null=True)
+    address = models.CharField(max_length=256, blank=True, null=True)
+    role = models.CharField(max_length=256)
 
     @property
     def group(self):

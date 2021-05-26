@@ -11,6 +11,7 @@ function AccountInfo(props) {
     const [tinh, setTinh] = useState([])
     const [huyen, setHuyen] = useState([])
     const { userInfo, setUserInfoFunc } = useContext(UserContext)
+    const [product, setProduct] = useState([])
 
     const [tabId, setTabId] = useState(1)
     const [userName, setUserName] = useState('')
@@ -27,88 +28,123 @@ function AccountInfo(props) {
     const [orderList, setOrderList] = useState([])
 
     useEffect(() => {
-        if (userInfo) {
-            console.log(userInfo)
-            setUserName(userInfo.userName)
-            setUserEmail(userInfo.userEmail)
-            setUserPhone(userInfo.userPhone)
-            setUserAvt(userInfo.userAvt)
-            setUserAddress(userInfo.userAddress)
-            if (userInfo.userTinh !== '') {
-                axios
-                    .get('http://localhost:8000/api/province/?format=json')
-                    .then((res) => {
-                        setTinh(res.data[0].tinh)
-                        setHuyen(res.data[0].huyen)
-                        res.data[0].tinh.filter((item) => {
-                            if (userInfo.userTinh === item.name) {
-                                setProvinceId(item.id)
-                            }
-                            return null
-                        })
-                    })
-                setUserTinh(userInfo.userTinh)
-            } else {
-                axios
-                    .get('http://localhost:8000/api/province/?format=json')
-                    .then((res) => {
-                        setTinh(res.data[0].tinh)
-                        setHuyen(res.data[0].huyen)
-                    })
-            }
-            if (userInfo.userHuyen !== '') {
-                setUserHuyen(userInfo.userHuyen)
-            }
-            axios.get(`http://127.0.0.1:8000/order`).then((res) => {
-                const orderList2 = []
-                for (let i in res.data) {
-                    if (res.data[i].orderEmail === userInfo.userEmail) {
-                        orderList2.push(res.data[i])
-                    }
-                }
-                setOrderList(orderList2)
+        axios
+            .get(`http://localhost:8000/api/products/?format=json`)
+            .then((res) => {
+                setProduct(res.data)
             })
+        if (userInfo) {
+            setUserName(userInfo.name)
+            setUserEmail(userInfo.email)
+            setUserPhone(userInfo.phone)
+            setUserAvt(userInfo.photo)
+            setUserAddress(userInfo.address)
+            setUserPassword(userInfo.password)
+            setUserTinh(userInfo.province)
+            setUserHuyen(userInfo.district)
+            axios
+                .get(`http://localhost:8000/api/orders/?format=json`)
+                .then((res) => {
+                    setOrderList(
+                        res.data.filter((item) => item.creator === userInfo.id)
+                    )
+                })
+            axios
+                .get('http://localhost:8000/api/province/?format=json')
+                .then((res) => {
+                    setTinh(res.data)
+                    res.data.filter((item) => {
+                        if (userInfo.name === item.name) {
+                            setProvinceId(item.id)
+                        }
+                        return null
+                    })
+                })
+            axios
+                .get('http://localhost:8000/api/district/?format=json')
+                .then((res) => {
+                    setHuyen(res.data)
+                })
         }
     }, [userInfo])
 
-    const submitInfo = (event) => {
+    const submitInfo = async (event) => {
         event.preventDefault()
         const config = {
             headers: {
                 'content-type': 'multipart/form-data',
             },
         }
-        const formData = new FormData()
         const imageArr = Array.from(file)
-        imageArr.forEach((image) => {
-            formData.append('userAvt', image)
-        })
-        formData.append('userName', userName)
-        formData.append('userEmail', userEmail)
-        formData.append('userPassword', userPassword)
-        formData.append('userPhone', userPhone)
-        formData.append('userTinh', userTinh)
-        formData.append('userHuyen', userHuyen)
-        formData.append('userAddress', userAddress)
-        localStorage.removeItem('token')
-        axios
-            .post(
-                `http://127.0.0.1:8000/users/update/${userInfo.id}`,
+        if (imageArr.length > 0) {
+            const formData = new FormData()
+            formData.append('url', imageArr[0])
+            const res = await axios.post(
+                `http://127.0.0.1:8000/api/images/`,
                 formData,
                 config
             )
-            .then((res) => {
-                setUserInfoFunc(res.data.user)
-                localStorage.setItem('token', res.data.token)
-            })
-            .catch((err) => {
-                console.log(err.response.data)
-            })
-
-        setToast(true)
-        setTimeout(() => {
-            setToast(false)
-        }, 2000)
+            const data = {
+                username: userInfo.username,
+                name: userName,
+                email: userEmail,
+                password: userPassword,
+                phone: userPhone,
+                province: userTinh,
+                district: userHuyen,
+                address: userAddress,
+                role: userInfo.username,
+                photo: res.data.url,
+                password: userPassword,
+            }
+            localStorage.removeItem('token')
+            axios
+                .put(`http://127.0.0.1:8000/api/profile/`, data, {
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem(
+                            'token'
+                        )}`,
+                    },
+                })
+                .then((res) => {
+                    setUserInfoFunc(res.data)
+                    localStorage.setItem('token', res.data.token)
+                    setToast(true)
+                    setTimeout(() => {
+                        setToast(false)
+                    }, 2000)
+                })
+        } else {
+            const data = {
+                username: userInfo.username,
+                name: userName,
+                email: userEmail,
+                password: userPassword,
+                phone: userPhone,
+                province: userTinh,
+                district: userHuyen,
+                address: userAddress,
+                role: userInfo.username,
+                photo: userInfo.photo,
+                password: userPassword,
+            }
+            axios
+                .put(`http://127.0.0.1:8000/api/profile/`, data, {
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem(
+                            'token'
+                        )}`,
+                    },
+                })
+                .then((res) => {
+                    setUserInfoFunc(res.data)
+                    localStorage.setItem('token', res.data.token)
+                    setToast(true)
+                    setTimeout(() => {
+                        setToast(false)
+                    }, 2000)
+                })
+        }
     }
 
     return (
@@ -126,13 +162,13 @@ function AccountInfo(props) {
                         <img
                             style={{ borderRadius: '50%' }}
                             className="accountinfo-avt-img"
-                            src={userInfo.userAvt}
+                            src={userInfo.photo}
                             alt=""
                             width="48px"
                             height="48px"
                         ></img>
                         <div className="accountinfo-avt-name">
-                            {userInfo.userName}
+                            {userInfo.username}
                         </div>
                     </div>
                     <div className="accountinfo-menu-list">
@@ -326,7 +362,8 @@ function AccountInfo(props) {
                                             </option>
                                             {huyen.map((item, index) => {
                                                 if (
-                                                    item.tinh_id === provinceId
+                                                    Number(item.tinh_id) ===
+                                                    Number(provinceId)
                                                 ) {
                                                     return (
                                                         <option
@@ -417,7 +454,7 @@ function AccountInfo(props) {
                                         </th>
                                     </tr>
                                     {orderList.reverse().map((item, index) => {
-                                        const date = new Date(item.orderDate)
+                                        const date = new Date(item.created)
                                         const day = date.getDate()
                                         const month = date.getMonth() + 1
                                         const year = date.getFullYear()
@@ -448,9 +485,9 @@ function AccountInfo(props) {
                                                                     '3',
                                                             }}
                                                         >
-                                                            {item.orderAddress},{' '}
-                                                            {item.orderHuyen},{' '}
-                                                            {item.orderTinh}
+                                                            {item.userAddress},{' '}
+                                                            {item.userDistrict},{' '}
+                                                            {item.userProvince}
                                                         </p>
                                                     </div>
                                                 </td>
@@ -466,38 +503,55 @@ function AccountInfo(props) {
                                                                 'capitalize',
                                                         }}
                                                     >
-                                                        {
-                                                            item.orderPaymentMethod
-                                                        }
+                                                        {item.paymentMethod}
                                                     </p>
                                                 </td>
                                                 <td>
                                                     {typeof totalItem ===
                                                         'number' && (
-                                                        <div
-                                                            key={index}
-                                                            className="flex"
-                                                            style={{
-                                                                justifyContent:
-                                                                    'space-between',
-                                                            }}
-                                                        >
-                                                            {/* <p style={{margin: '10px 0', width: '100%', WebkitLineClamp: '2'}}>{virtualArr.productName}</p> */}
-                                                            <p
-                                                                style={{
-                                                                    margin: '10px 0',
-                                                                    width: '50px',
-                                                                    marginLeft:
-                                                                        '20px',
-                                                                }}
-                                                            >
-                                                                {totalItem}
-                                                            </p>
+                                                        <div key={index}>
+                                                            {item.orderProduct
+                                                                .length > 0 &&
+                                                                item.orderProduct.map(
+                                                                    (item) => {
+                                                                        const productData =
+                                                                            product.filter(
+                                                                                (
+                                                                                    item2
+                                                                                ) =>
+                                                                                    item2.id ===
+                                                                                    item.id
+                                                                            )
+                                                                        return (
+                                                                            <div>
+                                                                                <p
+                                                                                    style={{
+                                                                                        margin: '10px 0',
+                                                                                        width: '100%',
+                                                                                        WebkitLineClamp:
+                                                                                            '2',
+                                                                                    }}
+                                                                                >
+                                                                                    {productData.length >
+                                                                                        0 &&
+                                                                                        productData[0]
+                                                                                            .name}
+                                                                                    (x
+                                                                                    {
+                                                                                        item.quantity
+                                                                                    }
+
+                                                                                    )
+                                                                                </p>
+                                                                            </div>
+                                                                        )
+                                                                    }
+                                                                )}
                                                         </div>
                                                     )}
                                                 </td>
                                                 <td>
-                                                    <p>{item.orderTotal} đ</p>
+                                                    <p>{item.totalAmount} đ</p>
                                                 </td>
                                             </tr>
                                         )

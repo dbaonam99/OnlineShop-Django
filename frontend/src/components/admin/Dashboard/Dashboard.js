@@ -7,17 +7,12 @@ import {
     faEnvelope,
     faFileInvoice,
     faHome,
-    faInbox,
-    faNewspaper,
     faShoppingBag,
     faTshirt,
     faUser,
 } from '@fortawesome/free-solid-svg-icons'
-
-// import socketIOClient from "socket.io-client"
 import Axios from 'axios'
 import { withRouter } from 'react-router-dom'
-const ENDPOINT = 'http://127.0.0.1:8000'
 
 function Dashboard(props) {
     const menuItems = [
@@ -57,37 +52,34 @@ function Dashboard(props) {
     const [openMenuMobile, setOpenMenuMobile] = useState(true)
     const [productId, setProductId] = useState('')
 
-    // const socket = socketIOClient(ENDPOINT);
-
     const [userInfo, setUserInfo] = useState(null)
 
     useEffect(() => {
-        // if (localStorage.getItem('token')) {
-        //     Axios.get(`http://127.0.0.1:8000/users/${localStorage.getItem('user-id')}`, {
-        //         headers: {"authorization" : `Bearer ${localStorage.getItem('token')}`}
-        //     })
-        //     .then(res => {
-        //         setUserInfo(res.data.user)
-        //         const userInfo = res.data.user;
-        //         if (userInfo.userRole === 'admin') {
-        //             socket.emit('join', {
-        //                 sessionId: 'admin',
-        //                 isAdmin: true
-        //             })
-        //             socket.on("placeAnOrder-notice", function(data) {
-        //                 setOrderNotice(data)
-        //             })
-        //         } else {
-        //             localStorage.setItem("errLogin", "You do not have Administrator access!")
-        //             props.history.push('/admin')
-        //         }
-        //     })
-        //     .catch(err => {
-        //         console.log(err)
-        //     })
-        // } else {
-        //     props.history.push('/admin')
-        // }
+        if (localStorage.getItem('token')) {
+            Axios.get(
+                `http://127.0.0.1:8000/api/users/${localStorage.getItem(
+                    'user-id'
+                )}`
+            )
+                .then((res) => {
+                    setUserInfo(res.data.user)
+                    const userInfo = res.data.user
+                    if (userInfo.role === 'admin') {
+                        // setOrderNotice(data)
+                    } else {
+                        localStorage.setItem(
+                            'errLogin',
+                            'You do not have Administrator access!'
+                        )
+                        props.history.push('/admin')
+                    }
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        } else {
+            props.history.push('/admin')
+        }
     }, [])
 
     const setTabIdOnClick = (id) => {

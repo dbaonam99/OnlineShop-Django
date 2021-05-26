@@ -32,16 +32,16 @@ function Account(props) {
                 })
                 .then((res) => {
                     console.log(res)
-                    // setArrSuccess((arrSuccess) => [
-                    //     ...arrSuccess,
-                    //     'Đăng nhập thành công!',
-                    // ])
-                    // setTimeout(() => {
-                    //     window.location.reload(false)
-                    //     document.body.style.overflow = 'unset'
-                    // }, 1000)
-                    // localStorage.setItem('token', res.data.access)
-                    // localStorage.setItem('user-id', user.loginEmail)
+                    setArrSuccess((arrSuccess) => [
+                        ...arrSuccess,
+                        'Đăng nhập thành công!',
+                    ])
+                    setTimeout(() => {
+                        window.location.reload(false)
+                        document.body.style.overflow = 'unset'
+                    }, 1000)
+                    localStorage.setItem('token', res.data.access)
+                    localStorage.setItem('user-id', res.data.id)
                 })
                 .catch((err) => {
                     setArrErr((arrErr) => [...arrErr, 'Đăng nhập thất bại!'])
@@ -51,7 +51,12 @@ function Account(props) {
                 .post('http://127.0.0.1:8000/api/sign_up/', {
                     username: user.registerName,
                     password: user.registerPassword,
-                    customer_role: 'user',
+                    role: 'user',
+                    email: '',
+                    province: '',
+                    district: '',
+                    address: '',
+                    photo: 'https://www.shareicon.net/data/512x512/2017/01/06/868320_people_512x512.png',
                 })
                 .then((res) => {
                     setArrSuccess((arrSuccess) => [
@@ -75,13 +80,17 @@ function Account(props) {
                 `http://127.0.0.1:8000/api/users/${localStorage.getItem(
                     'user-id'
                 )}`
+                // {
+                //     headers: {
+                //         authorization: `Bearer ${localStorage.getItem(
+                //             'token'
+                //         )}`,
+                //     },
+                // }
             )
             .then((res) => {
-                setUserInfoFunc(res.data.user)
+                setUserInfoFunc(res.data)
                 setLogin(true)
-            })
-            .catch((err) => {
-                console.log(err)
             })
     }, [])
 

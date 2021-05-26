@@ -95,6 +95,7 @@ export default function DashboardProductCreate(props) {
                     available: true,
                     size: size,
                     product_votes: [],
+                    sold: 0,
                 })
                 .then((res) => {
                     props.setCloseCreateFunc(false)

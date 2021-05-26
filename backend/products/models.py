@@ -24,17 +24,7 @@ class ProductSize(models.Model):
 class Product(models.Model):
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
     name = models.CharField(max_length=200, db_index=True)
-    MAN = 'MAN'
-    WOMAN = 'WOMAN'
-    SEX_CHOICES = [
-        (MAN, 'Man'),
-        (WOMAN, 'Woman')
-    ]
-    sex = models.CharField(
-        max_length=5, 
-        choices=SEX_CHOICES,
-    )
-    slug = models.SlugField(max_length=200, db_index=True)
+    sex = models.CharField(max_length=200, db_index=True)
     description = models.TextField(blank=True)
     price = models.IntegerField()
     sale = models.IntegerField()
@@ -43,16 +33,17 @@ class Product(models.Model):
     photo = models.TextField(blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    final_price = models.IntegerField()
+    finalPrice = models.IntegerField()
+    sold = models.IntegerField()
     class Meta:
         ordering = ('name',)
-        index_together = (('id', 'slug'),)
+        index_together = (('id'),)
 
     def __str__(self):
         return self.name
 
     @property
-    def final_price(self):
+    def finalPrice(self):
         return (self.price - (self.price * self.sale / 100))
 
 

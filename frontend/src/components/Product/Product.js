@@ -83,7 +83,7 @@ function Product(props) {
                 <ProductOverlay product={product} openView={openView} />
             </div>
             <div className="product-title">{product.name}</div>
-            {product.final_price && product.final_price < product.price && (
+            {product.finalPrice && product.finalPrice < product.price && (
                 <div className="product-price flex-center">
                     <p
                         style={{
@@ -98,17 +98,17 @@ function Product(props) {
                         Đ
                     </p>
                     <p>
-                        {product.final_price
+                        {product.finalPrice
                             .toString()
                             .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}{' '}
                         Đ
                     </p>
                 </div>
             )}
-            {product.final_price && product.final_price === product.price && (
+            {product.finalPrice && product.finalPrice === product.price && (
                 <div className="product-price">
                     <p>
-                        {product.final_price
+                        {product.finalPrice
                             .toString()
                             .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}{' '}
                         Đ

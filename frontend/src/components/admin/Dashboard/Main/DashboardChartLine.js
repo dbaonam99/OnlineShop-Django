@@ -67,7 +67,7 @@ export default function DashboardChartLine(props) {
                         new Date(order[i].created).getMonth() + 1 ===
                         month[j].id
                     ) {
-                        month[j].totalSale += order[i].total_amount
+                        month[j].totalSale += order[i].totalAmount
                     }
                 }
             }

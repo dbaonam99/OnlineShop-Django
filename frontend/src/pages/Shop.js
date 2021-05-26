@@ -44,7 +44,7 @@ function Shop(props) {
                     for (let i in res.data) {
                         if (cate) {
                             if (
-                                res.data[i].productName
+                                res.data[i].name
                                     .toLowerCase()
                                     .includes(cate.toLowerCase())
                             ) {
@@ -63,12 +63,12 @@ function Shop(props) {
                 .then((res) => {
                     const virtualCate = []
                     for (let i in res.data) {
-                        if (sex === 'woman') {
-                            if (res.data[i].sex === 'Woman') {
+                        if (sex === 'WOMAN') {
+                            if (res.data[i].sex === 'WOMAN') {
                                 virtualCate.push(res.data[i])
                             }
                         } else {
-                            if (res.data[i].sex === 'Man') {
+                            if (res.data[i].sex === 'MAN') {
                                 virtualCate.push(res.data[i])
                             }
                         }
@@ -84,6 +84,7 @@ function Shop(props) {
                             return a
                         }, Object.create(null))
                     )
+                    console.log(virtualCate)
                     //Sort and splice category by posts count
                     sortedcate.sort((a, b) => b.count - a.count)
                     setSortedCate(sortedcate)
@@ -120,6 +121,8 @@ function Shop(props) {
                 })
         }
     }, [sex, cate])
+
+    console.log(sortedCate)
 
     return (
         <div className="Men">

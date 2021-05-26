@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import '../../../../App.css'
 import '../../../../Styles/Dashboard.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPencilAlt, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios'
 import classNames from 'classnames'
 
@@ -10,15 +10,16 @@ export default function DashboardUserTable(props) {
     const [user, setUser] = useState([])
     const [isSortByName, setIsSortByName] = useState(false)
     const [constUser, setConstUser] = useState([])
+    const [isChanged, setIsChanged] = useState(false)
 
     useEffect(() => {
-        // axios.get(`http://127.0.0.1:8000/users/list`)
-        //     .then(res => {
-        //         setUser(res.data)
-        //         setConstUser(res.data)
-        //     }
-        // )
-    }, [props.isChange])
+        axios
+            .get(`http://localhost:8000/api/users/?format=json`)
+            .then((res) => {
+                setUser(res.data)
+                setConstUser(res.data)
+            })
+    }, [props.isChange, isChanged])
 
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 5
@@ -104,24 +105,24 @@ export default function DashboardUserTable(props) {
     }
 
     const deleteOnClick = (event) => {
-        axios.post(`http://127.0.0.1:8000/users/delete/:${event.target.id}`, {
-            id: event.target.id,
-        })
+        axios.delete(`http://localhost:8000/api/users/${event.target.id}`)
         setUser(
             user.filter((item) => {
                 return item.id !== event.target.id
             })
         )
+        setIsChanged(!isChanged)
     }
 
     const searchOnSubmit = (event) => {
         event.preventDefault()
     }
+
     const searchOnChange = (event) => {
         const searchInput = event.target.value
         const search = []
         for (let i in constUser) {
-            if (constUser[i].userName.toLowerCase().includes(searchInput)) {
+            if (constUser[i].username.toLowerCase().includes(searchInput)) {
                 search.push(constUser[i])
             }
         }
@@ -133,8 +134,8 @@ export default function DashboardUserTable(props) {
             if (isSortByName) {
                 const sortByName = [...user]
                 sortByName.sort(function (a, b) {
-                    var userA = a.userName.toLowerCase()
-                    var userB = b.userName.toLowerCase()
+                    var userA = a.username.toLowerCase()
+                    var userB = b.username.toLowerCase()
                     if (userA === userB) return 0
                     return userA > userB ? 1 : -1
                 })
@@ -143,8 +144,8 @@ export default function DashboardUserTable(props) {
             } else {
                 const sortByName = [...user]
                 sortByName.sort(function (a, b) {
-                    var userA = a.userName.toLowerCase()
-                    var userB = b.userName.toLowerCase()
+                    var userA = a.username.toLowerCase()
+                    var userB = b.username.toLowerCase()
                     if (userA === userB) return 0
                     return userA < userB ? 1 : -1
                 })
@@ -165,12 +166,6 @@ export default function DashboardUserTable(props) {
                 </div>
                 <div className="topfive-content flex-col">
                     <div className="dashboard-addnew flex">
-                        <div
-                            className="dashboard-addnew-btn btn"
-                            onClick={props.setOpenCreateFunc}
-                        >
-                            Add new
-                        </div>
                         <div className="dashboard-addnew-search">
                             <form onSubmit={searchOnSubmit}>
                                 <input
@@ -208,7 +203,7 @@ export default function DashboardUserTable(props) {
                                         <td style={{ display: 'flex' }}>
                                             <img
                                                 className="table-mobile-useravt"
-                                                src={item.userAvt}
+                                                src={item.photo}
                                                 width="70px"
                                                 height="80px"
                                                 style={{
@@ -219,38 +214,22 @@ export default function DashboardUserTable(props) {
                                             />
                                         </td>
                                         <td>
-                                            <p>{item.userName}</p>
+                                            <p>{item.username}</p>
                                         </td>
                                         <td className="table-mobile-useremail">
-                                            <p>{item.userEmail}</p>
+                                            <p>{item.email}</p>
                                         </td>
                                         <td className="table-mobile-userphone">
-                                            <p>{item.userPhone}</p>
+                                            <p>{item.phone}</p>
                                         </td>
                                         <td className="table-mobile-useraddress">
                                             <p>
-                                                {item.userAddress},{' '}
-                                                {item.userHuyen},{' '}
-                                                {item.userTinh}
+                                                {item.address}, {item.district},{' '}
+                                                {item.province}
                                             </p>
                                         </td>
                                         <td>
                                             <div className="action-table flex">
-                                                <div
-                                                    className="action-item flex-center action-green"
-                                                    onClick={
-                                                        props.setOpenEditFunc
-                                                    }
-                                                    id={item.id}
-                                                >
-                                                    <FontAwesomeIcon
-                                                        style={{
-                                                            pointerEvents:
-                                                                'none',
-                                                        }}
-                                                        icon={faPencilAlt}
-                                                    />
-                                                </div>
                                                 <div
                                                     className="action-item flex-center action-red"
                                                     onClick={deleteOnClick}

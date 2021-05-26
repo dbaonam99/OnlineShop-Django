@@ -10,13 +10,11 @@ import DashboardProductCreate from './Product/DashboardProductCreate'
 import Axios from 'axios'
 import DashboardUser from './User/DashboardUser'
 import DashboardUserCreate from './User/DashboardUserCreate'
-import DashboardUserEdit from './User/DashboardUserEdit'
 import DashboardOrder from './Order/DashboardOrder'
 import DashboardCollection from './Collection/DashboardCollection'
 import DashboardCollectionEdit from './Collection/DashboardCollectionEdit'
 import DashboardCollectionCreate from './Collection/DashboardCollectionCreate'
 import DashboardSubscriber from './Subscriber/DashboardSubscriber'
-import DashboardSubscriberEdit from './Subscriber/DashboardSubscriberEdit'
 import DashboardSubscriberCreate from './Subscriber/DashboardSubscriberCreate'
 
 export default function DashboardBody(props) {
@@ -25,9 +23,6 @@ export default function DashboardBody(props) {
     const [isChange, setIsChange] = useState(false)
     const [product, setProduct] = useState({})
     const [collection, setCollection] = useState({})
-    const [subscriber, setSubscriber] = useState({})
-    const [user, setUser] = useState({})
-    const [order, setOrder] = useState({})
 
     const setToastFunc = (bool) => {
         setIsChange(true)
@@ -51,21 +46,6 @@ export default function DashboardBody(props) {
         ).then((res) => {
             setCollection(res.data)
         })
-        Axios.get(
-            `http://localhost:8000/api/subscribers/${props.productId}?format=json`
-        ).then((res) => {
-            setSubscriber(res.data)
-        })
-        // Axios.get(`http://127.0.0.1:8000/users/list/${props.productId}`)
-        //     .then(res => {
-        //         setUser(res.data)
-        //     }
-        // )
-        // Axios.get(`http://127.0.0.1:8000/order/${props.productId}`)
-        //     .then(res => {
-        //         setOrder(res.data)
-        //     }
-        // )
     }, [props.productId, props.openEdit])
 
     return (
@@ -99,13 +79,6 @@ export default function DashboardBody(props) {
                     setToastFunc={setToastFunc}
                 />
             )}
-            {props.openEdit && tabId === '4' && (
-                <DashboardUserEdit
-                    setCloseEditFunc={props.setCloseEditFunc}
-                    setToastFunc={setToastFunc}
-                    user={user}
-                />
-            )}
             {props.openCreate && tabId === '5' && (
                 <DashboardCollectionCreate
                     setCloseCreateFunc={props.setCloseCreateFunc}
@@ -123,13 +96,6 @@ export default function DashboardBody(props) {
                 <DashboardSubscriberCreate
                     setCloseCreateFunc={props.setCloseCreateFunc}
                     setToastFunc={setToastFunc}
-                />
-            )}
-            {props.openEdit && tabId === '6' && (
-                <DashboardSubscriberEdit
-                    setCloseEditFunc={props.setCloseEditFunc}
-                    setToastFunc={setToastFunc}
-                    subscriber={subscriber}
                 />
             )}
             <DashboardHeader

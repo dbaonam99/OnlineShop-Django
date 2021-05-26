@@ -291,38 +291,31 @@ export default function ProductBody(props) {
                         <p>({ratingList.length} customer reviews)</p>
                     </div>
 
-                    {product.final_price &&
-                        product.final_price < product.price && (
-                            <div className="product-info-price">
-                                <span
-                                    style={{
-                                        textDecoration: 'line-through',
-                                        color: '#777',
-                                        marginRight: '10px',
-                                        fontSize: '10px',
-                                    }}
-                                >
-                                    {product.price
-                                        .toString()
-                                        .replace(
-                                            /\B(?=(\d{3})+(?!\d))/g,
-                                            '.'
-                                        )}{' '}
-                                    Đ
-                                </span>
-                                <span style={{ height: 'max-content' }}>
-                                    {product.final_price
-                                        .toString()
-                                        .replace(
-                                            /\B(?=(\d{3})+(?!\d))/g,
-                                            '.'
-                                        )}{' '}
-                                    Đ
-                                </span>
-                            </div>
-                        )}
-                    {product.final_price &&
-                        product.final_price === product.price && (
+                    {product.finalPrice && product.finalPrice < product.price && (
+                        <div className="product-info-price">
+                            <span
+                                style={{
+                                    textDecoration: 'line-through',
+                                    color: '#777',
+                                    marginRight: '10px',
+                                    fontSize: '10px',
+                                }}
+                            >
+                                {product.price
+                                    .toString()
+                                    .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}{' '}
+                                Đ
+                            </span>
+                            <span style={{ height: 'max-content' }}>
+                                {product.finalPrice
+                                    .toString()
+                                    .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}{' '}
+                                Đ
+                            </span>
+                        </div>
+                    )}
+                    {product.finalPrice &&
+                        product.finalPrice === product.price && (
                             <div className="product-info-price">
                                 {product.price
                                     .toString()

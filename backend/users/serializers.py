@@ -3,22 +3,35 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
+from orders.models import Order
 
-class UserSerializer(serializers.ModelSerializer):
+
+class UserSerializer(serializers.ModelSerializer): 
+    orderUser = serializers.PrimaryKeyRelatedField(
+        many=True, 
+        read_only=True
+    ) 
 
     def create(self, validated_data):
         data = {
             key: value for key, value in validated_data.items()
-            if key not in ('password')
+            if key not in ('password',)
         }
         data['password'] = validated_data['password']
         return self.Meta.model.objects.create_user(**data)
 
+    def update(self, instance, validated_data):
+        for attr, value in validated_data.items():
+            if attr == 'password':
+                instance.set_password(validated_data["password"])
+                instance.save()
+        return instance 
+
     class Meta:
         model = get_user_model()
         fields = (
-            'id', 'username', 'password',
-            'first_name', 'last_name',
+            'id', 'username','name', 'password', 'email', 'phone',
+            'province', 'district', 'orderUser', 'district', 'role', 'photo', 'address'
         )
         read_only_fields = ('id',)
 
@@ -31,15 +44,22 @@ class LogInSerializer(TokenObtainPairSerializer):
         for key, value in user_data.items():
             if key != 'id':
                 token[key] = value
-        token['name'] = "1123123"
         return token
 
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        data['id'] = self.user.id
+        data['role'] = self.user.role
+        return data
+
 class UserManagerSerializer(serializers.ModelSerializer):
-    orders_creator = serializers.PrimaryKeyRelatedField(
+    orderUser = serializers.PrimaryKeyRelatedField(
         many=True,
         read_only=True
     )
     class Meta:
         model = get_user_model()
-        fields = ('id', 'username',
-            'first_name', 'last_name','orders_creator')
+        fields = (
+            'id', 'username', 'password', 'email', 'name', 'phone',
+            'province', 'district', 'orderUser', 'district', 'role', 'photo', 'address',
+        )

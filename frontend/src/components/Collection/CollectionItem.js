@@ -43,7 +43,7 @@ function CollectionItem(props) {
                             setHoverPrice(false)
                         }}
                     >
-                        {product.final_price && (
+                        {product.finalPrice && (
                             <p
                                 className={
                                     hoverPrice
@@ -51,7 +51,7 @@ function CollectionItem(props) {
                                         : 'collectionitem-price-text'
                                 }
                             >
-                                {product.final_price
+                                {product.finalPrice
                                     .toString()
                                     .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                                 đ

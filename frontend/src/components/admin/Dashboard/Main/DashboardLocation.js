@@ -22,12 +22,12 @@ export default function DashboardLocation(props) {
     }, [])
 
     const tinh = Object.values(
-        order.reduce((a, { customer_province }) => {
-            a[customer_province] = a[customer_province] || {
-                customer_province,
+        order.reduce((a, { userProvince }) => {
+            a[userProvince] = a[userProvince] || {
+                userProvince,
                 count: 0,
             }
-            a[customer_province].count++
+            a[userProvince].count++
             return a
         }, Object.create(null))
     )
@@ -73,12 +73,10 @@ export default function DashboardLocation(props) {
                                 <div
                                     key={index}
                                     className="top-location-div flex"
-                                    onClick={() =>
-                                        setMap(item.customer_province)
-                                    }
+                                    onClick={() => setMap(item.userProvince)}
                                 >
                                     <div style={{ width: '60%' }}>
-                                        {item.customer_province}
+                                        {item.userProvince}
                                     </div>
                                     <div
                                         style={{

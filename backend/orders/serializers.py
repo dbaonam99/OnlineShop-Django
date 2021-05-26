@@ -1,43 +1,29 @@
 from rest_framework import serializers
 
-from .models import Order, OrderLine
+from .models import Order, OrderProduct
 from products.models import Product
 
 
-class OrderLineSerializers(serializers.ModelSerializer):
+class OrderProductSerializers(serializers.ModelSerializer):
     class Meta:
-        model = OrderLine
+        model = OrderProduct
         fields = ('id', 'product', 'quantity')
 
-
-
 class OrderSerializers(serializers.ModelSerializer):
-    # products =  serializers.PrimaryKeyRelatedField(
-    #     many=True,
-    #     queryset=Product.objects.all()
-    # )
-    # quantity = serializers.IntegerField()
-    # list_items = serializers.SerializerMethodField(method_name="get_list_items)
-    lines = OrderLineSerializers(many=True)
+    orderProduct = OrderProductSerializers(many=True)
     class Meta:
         model = Order
-        fields = ('id', 'customer_name', 'customer_email', 'customer_phone', 'customer_province', 'customer_district', 'lines',
-                'customer_address', 'total_amount', 'payment_method', 'created', 'creator')
-        #readd_only_fields = ('creator',)
-
-    # def get_list_items(self, obj):
-        # product_list = Product.objects.filter()
-
-    # def perform_create(self, serializer):
-    #     """Create a new object"""
-    #     serializer.save(creator=self.request.user)
-
-
+        fields = ('id', 'userName', 'userEmail', 'userPhone', 'userProvince', 'userDistrict', 'orderProduct',
+                'userAddress', 'totalAmount', 'paymentMethod', 'created', 'creator')
 
     def create(self, validated_data):
-        lines_data = validated_data.pop('lines')
+        orderProducts = validated_data.pop('orderProduct')
         order =  Order.objects.create(**validated_data)
-        for line_data in lines_data:
-            OrderLine.objects.create(order=order, **line_data)
+        for line_data in orderProducts:
+            product_obj = line_data.get("product")
+            if product_obj:
+                product_obj.sold += line_data.get("quantity")
+                product_obj.save()
+            OrderProduct.objects.create(order=order, **line_data)
         return order
         

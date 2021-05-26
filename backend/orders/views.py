@@ -1,16 +1,14 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework import permissions
-from .models import Order, OrderLine
-from .serializers import OrderSerializers, OrderLineSerializers
+from .models import Order, OrderProduct
+from .serializers import OrderSerializers, OrderProductSerializers
 
 
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
-    serializer_class = OrderSerializers
-    # permission_classes = [permissions.IsAuthenticated,]
+    serializer_class = OrderSerializers 
 
-class OrderLineViewSet(viewsets.ModelViewSet):
-    queryset = OrderLine.objects.all()
-    serializer_class = OrderLineSerializers
-    # permission_classes = [permissions.IsAuthenticated,]
+class OrderProductViewSet(viewsets.ModelViewSet):
+    queryset = OrderProduct.objects.all()
+    serializer_class = OrderProductSerializers 

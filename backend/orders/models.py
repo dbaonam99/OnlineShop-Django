@@ -1,30 +1,24 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-
 from products.models import Product
-
-
-
-
-
 
 class Order(models.Model):
     creator = models.ForeignKey(
-        get_user_model(), related_name="orders_creator", null=True,
+        get_user_model(), related_name="orderUser", null=True,
         blank=True, on_delete=models.SET_NULL
     )
-    customer_name = models.CharField(max_length=256)
-    customer_email = models.CharField(max_length=256)
-    customer_phone = models.CharField(max_length=15)
-    customer_province = models.CharField(max_length=256)
-    customer_district = models.CharField(max_length=256)
-    customer_address = models.CharField(max_length=256)
-    total_amount = models.FloatField()
-    payment_method = models.CharField(max_length=256)
+    userName = models.CharField(max_length=256)
+    userEmail = models.CharField(max_length=256)
+    userPhone = models.CharField(max_length=15)
+    userProvince = models.CharField(max_length=256)
+    userDistrict = models.CharField(max_length=256)
+    userAddress = models.CharField(max_length=256)
+    totalAmount = models.FloatField()
+    paymentMethod = models.CharField(max_length=256)
     created = models.DateTimeField(auto_now_add=True)
 
 
-class OrderLine(models.Model):
-    order = models.ForeignKey(Order, related_name='lines', on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, related_name='lines', on_delete=models.CASCADE)
+class OrderProduct(models.Model):
+    order = models.ForeignKey(Order, related_name='orderProduct', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, related_name='orderProduct', on_delete=models.CASCADE)
     quantity = models.IntegerField()

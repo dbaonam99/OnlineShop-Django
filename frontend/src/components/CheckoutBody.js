@@ -30,37 +30,38 @@ function CheckoutBody(props) {
     const [isPaid, setIsPaid] = useState(false)
 
     useEffect(() => {
-        // if (userInfo) {
-        //     setUserAvt(userInfo.userAvt)
-        //     set_Id(userInfo.id)
-        //     setNameInput(userInfo.userName)
-        //     setEmailInput(userInfo.userEmail)
-        //     setPhoneInput(userInfo.userPhone)
-        //     setAddressInput(userInfo.userAddress)
-        //     if (userInfo.userTinh !== '') {
-        //         axios.get(`http://127.0.0.1:8000/vietnam`).then((res) => {
-        //             setTinh(res.data[0].tinh)
-        //             setHuyen(res.data[0].huyen)
-        //             res.data[0].tinh.filter((item) => {
-        //                 if (userInfo.userTinh === item.name) {
-        //                     setProvinceId(item.id)
-        //                 }
-        //                 return null
-        //             })
-        //         })
-        //         setUserTinh(userInfo.userTinh)
-        //     } else {
-        //         axios
-        //             .get(`http://localhost:8000/api/province/?format=json`)
-        //             .then((res) => {
-        //                 setTinh(res.data[0].tinh)
-        //                 // setHuyen(res.data[0].huyen)
-        //             })
-        //     }
-        //     if (userInfo.userHuyen !== '') {
-        //         setUserHuyen(userInfo.userHuyen)
-        //     }
-        // }
+        if (userInfo) {
+            console.log(userInfo)
+            setUserAvt(userInfo.photo)
+            set_Id(userInfo.id)
+            setNameInput(userInfo.username)
+            setEmailInput(userInfo.email)
+            setPhoneInput(userInfo.phone)
+            setAddressInput(userInfo.address)
+            // if (userInfo.userTinh !== '') {
+            //     axios.get(`http://127.0.0.1:8000/vietnam`).then((res) => {
+            //         setTinh(res.data[0].tinh)
+            //         setHuyen(res.data[0].huyen)
+            //         res.data[0].tinh.filter((item) => {
+            //             if (userInfo.userTinh === item.name) {
+            //                 setProvinceId(item.id)
+            //             }
+            //             return null
+            //         })
+            //     })
+            //     setUserTinh(userInfo.userTinh)
+            // } else {
+            //     axios
+            //         .get(`http://localhost:8000/api/province/?format=json`)
+            //         .then((res) => {
+            //             setTinh(res.data[0].tinh)
+            //             // setHuyen(res.data[0].huyen)
+            //         })
+            // }
+            if (userInfo.userHuyen !== '') {
+                setUserHuyen(userInfo.userHuyen)
+            }
+        }
 
         axios
             .get(`http://localhost:8000/api/province/?format=json`)
@@ -83,11 +84,6 @@ function CheckoutBody(props) {
         setMethodPayMent(Number(event.target.id))
     }
 
-    const showQR = (text) => {
-        setIsShowQR(true)
-        setQRValue(text)
-    }
-
     const placeAnOrder = () => {
         let orderPaymentMethod2 = ''
         if (methodPayment === 1) {
@@ -106,32 +102,29 @@ function CheckoutBody(props) {
         }
 
         const data = {
-            customer_name: nameInput,
-            customer_email: emailInput,
-            customer_phone: phoneInput,
-            customer_province: userTinh,
-            customer_district: userHuyen,
-            customer_address: addressInput,
-            lines: cartId,
-            total_amount: total,
-            payment_method: orderPaymentMethod2,
+            userName: nameInput,
+            userEmail: emailInput,
+            userPhone: phoneInput,
+            userProvince: userTinh,
+            userDistrict: userHuyen,
+            userAddress: addressInput,
+            orderProduct: cartId,
+            totalAmount: total,
+            paymentMethod: orderPaymentMethod2,
+            creator: userInfo && userInfo.id,
         }
-        axios
-            .post('http://localhost:8000/api/orders/', data)
-            .then((res) => {
-                console.log(res)
-            })
-            .then(() => {
-                setTimeout(() => {
-                    setConfirm(true)
-                    document.body.style.overflow = 'hidden'
-                    window.scrollTo(0, 0)
-                }, 1000)
-                setOrderPaymentMethod(orderPaymentMethod2)
-                let addressStr =
-                    addressInput + ', ' + userTinh + ', ' + userHuyen
-                setOrderAddressConfirm(addressStr)
-            })
+        console.log(data)
+        axios.post('http://localhost:8000/api/orders/', data).then((res) => {
+            console.log(res)
+            setTimeout(() => {
+                setConfirm(true)
+                document.body.style.overflow = 'hidden'
+                window.scrollTo(0, 0)
+            }, 1000)
+            setOrderPaymentMethod(orderPaymentMethod2)
+            let addressStr = addressInput + ', ' + userTinh + ', ' + userHuyen
+            setOrderAddressConfirm(addressStr)
+        })
     }
 
     return (
@@ -177,7 +170,7 @@ function CheckoutBody(props) {
                                                 </div>
                                                 <div className="billing-detail-price">
                                                     {(
-                                                        item.final_price *
+                                                        item.finalPrice *
                                                         item.count
                                                     )
                                                         .toString()
@@ -464,7 +457,7 @@ function CheckoutBody(props) {
                                                 {item.count}
                                             </div>
                                             <div className="billing-detail-price">
-                                                {(item.final_price * item.count)
+                                                {(item.finalPrice * item.count)
                                                     .toString()
                                                     .replace(
                                                         /\B(?=(\d{3})+(?!\d))/g,
