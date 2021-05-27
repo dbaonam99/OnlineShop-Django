@@ -115,6 +115,7 @@ export default function DashboardProductEdit(props) {
                 sale: productSale,
                 sex: productSex,
                 size: productSize,
+                sold: 10,
             })
             .then((res) => {
                 // const formData = new FormData()

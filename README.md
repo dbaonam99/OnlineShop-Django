@@ -17,3 +17,15 @@
 -   **Database:**
     -   Sử dụng MongoDB
     -   Số lượng khoảng 20 sản phẩm quần áo, túi sách, trang sức
+-   **Cách start project:**
+    -   **Chạy Frontend**:
+    ```
+    cd frontend
+    npm start
+    ```
+    -   **Chạy Backend**:
+    ```
+    source env/bin/activate
+    cd backend
+    python manage.py runserver
+    ```

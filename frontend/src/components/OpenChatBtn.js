@@ -3,12 +3,9 @@ import '../Styles/Chat.css'
 import '../App.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faComment, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
-import socketIOClient from 'socket.io-client'
 import { withRouter } from 'react-router-dom'
 import axios from 'axios'
 import { UserContext } from '../contexts/User'
-
-const ENDPOINT = 'http://127.0.0.1:8000'
 
 function OpenChatBtn(props) {
     const messageRef = useRef()
@@ -17,7 +14,6 @@ function OpenChatBtn(props) {
     const [onHover, setOnHover] = useState(false)
     const [inputValue, setInputValue] = useState('')
 
-    const socket = socketIOClient(ENDPOINT)
     const [chatList, setChatList] = useState([])
 
     const [userName, setUserName] = useState('')
@@ -27,48 +23,29 @@ function OpenChatBtn(props) {
     const { userInfo } = useContext(UserContext)
 
     useEffect(() => {
-        if (userInfo) {
-            setUserName(userInfo.userName)
-            setUserEmail(userInfo.userEmail)
-            setUserInfoExist(true)
-            sessionStorage.removeItem('chat-id')
-            sessionStorage.setItem('chat-id', userInfo.id)
-        }
-        if (!sessionStorage.getItem('chat-id')) {
-            sessionStorage.setItem(
-                'chat-id',
-                Math.floor(Math.random() * 190000000) + 100000000
-            )
-        }
-        axios
-            .get(
-                `http://127.0.0.1:8000/chat/${sessionStorage.getItem(
-                    'chat-id'
-                )}`
-            )
-            .then((res) => {
-                if (res.data.length > 0) setChatList(res.data[0].chatContent)
-            })
+        // if (userInfo) {
+        //     setUserName(userInfo.userName)
+        //     setUserEmail(userInfo.userEmail)
+        //     setUserInfoExist(true)
+        //     sessionStorage.removeItem('chat-id')
+        //     sessionStorage.setItem('chat-id', userInfo.id)
+        // }
+        // if (!sessionStorage.getItem('chat-id')) {
+        //     sessionStorage.setItem(
+        //         'chat-id',
+        //         Math.floor(Math.random() * 190000000) + 100000000
+        //     )
+        // }
+        // axios
+        //     .get(
+        //         `http://127.0.0.1:8000/chat/${sessionStorage.getItem(
+        //             'chat-id'
+        //         )}`
+        //     )
+        //     .then((res) => {
+        //         if (res.data.length > 0) setChatList(res.data[0].chatContent)
+        //     })
     }, [userInfo])
-
-    useEffect(() => {
-        socket.emit('join', {
-            sessionId: sessionStorage.getItem('chat-id'),
-            isAdmin: false,
-        })
-        socket.on('sendFirstInfo', (data) => {
-            if (data.length > 0) setChatList(data[0].chatContent)
-        })
-        socket.on('thread', (data) => {
-            setChatList(data.chatContent)
-        })
-        socket.on('admin-msg', function (data) {
-            setChatList((chatList) => [...chatList, data])
-            setTimeout(() => {
-                messageRef.current.scrollIntoView({ behavior: 'smooth' })
-            }, 100)
-        })
-    }, [])
 
     const handleChange = (event) => {
         setInputValue({
@@ -80,18 +57,6 @@ function OpenChatBtn(props) {
 
     const sendFirstChatOnSubmit = (event) => {
         event.preventDefault()
-        socket.emit('firstMessage', {
-            userInfo: userInfo || null,
-            sessionId: sessionStorage.getItem('chat-id'),
-            chatName: userName,
-            chatEmail: userEmail,
-            chatContent: [
-                {
-                    text: inputValue.chatContent,
-                    time: new Date(),
-                },
-            ],
-        })
         setChatList((chatList) => [
             ...chatList,
             {
@@ -103,11 +68,6 @@ function OpenChatBtn(props) {
 
     const sendChatOnSubmit = (event) => {
         event.preventDefault()
-        socket.emit('messageSend', {
-            sessionId: sessionStorage.getItem('chat-id'),
-            text: inputValue.messageSend,
-            time: new Date(),
-        })
         setChatList((chatList) => [
             ...chatList,
             { text: inputValue.messageSend, time: new Date() },

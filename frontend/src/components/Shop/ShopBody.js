@@ -48,7 +48,7 @@ function ShopBody(props) {
 
     const soldProduct = [...product]
     if (soldProduct.length > 0) {
-        soldProduct.sort((a, b) => b.productSold - a.productSold)
+        soldProduct.sort((a, b) => b.sold - a.sold)
     }
     const dateProductVirtual = [...product]
     const dateProduct = []
@@ -74,6 +74,7 @@ function ShopBody(props) {
     }
 
     const chooseCateLink = (event) => {
+        console.log(event.target.id)
         props.history.push(
             `/${location}/${event.target.id.toLowerCase().split(' ').join('-')}`
         )
@@ -185,7 +186,7 @@ function ShopBody(props) {
                                 <div
                                     className="shopbody-filter-catelink"
                                     key={index}
-                                    id={item.productCate}
+                                    id={item.category_name}
                                     onClick={chooseCateLink}
                                 >
                                     {item.category_name}
