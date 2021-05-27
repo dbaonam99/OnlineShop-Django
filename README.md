@@ -16,4 +16,4 @@
     -   Database: MongoDB
 -   **Database:**
     -   Sử dụng MongoDB
-    -   Số lượng khoảng 20 sản phẩm quần áo
+    -   Số lượng khoảng 20 sản phẩm quần áo, túi sách, trang sức
